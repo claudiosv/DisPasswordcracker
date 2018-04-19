@@ -1,1 +1,5 @@
 # DisPasswordcracker
+
+We will have 4 raspberry pis. 1 will be the master. The master is the one with the lowest local ipv4 address. All nodes have a password list (wordlist) numbered 0 .. n. The nodes will send a "MORE" message to the master. The master will reply with a block of passwords to try, e.g. 0 ... 500. The next MORE message will get 501 ... 1000 and so on. Alternatively, only the master has the list and instead sends 500 words to try. The client will send "FOUND" to the master if a matching hash is found. Otherwise just "MORE" over and over. When the master knows all blocks have been sent, he sends "END" to the clients and they stop requesting and everyone gives up.
+
+The system needs to be resilient, so consider what happens if the master is disconnected or a node is disconnected in the middle of processing a block. A new master needs to be chosen (e.g. lowest IP), and everyone has to know where to pick up from. In the case of a node, the master should reissue the block to another node.
