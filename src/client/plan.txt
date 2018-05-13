@@ -1,0 +1,18 @@
+// the leader needs to be connected to, has the have the
+// lowest IP address, and will distribute integer ranges to try
+
+// tcp protocol needs several cases:
+// 1. the leader tells a worker what integer range to work on
+// 2. the leader tells a worker what the current progress is
+// 3. the worker asks the leader for a new range
+// 4. the leader informs the worker of the other workers ip address (for leader fallback, lowest ip is used)
+// 5. the team has found a solution, cancel all threads and move on
+// 6. searching for a new leader 
+// 
+
+//this means all workers must have the current state of progress in memory
+// when a worker is not connected, it connects to nutt and asks getTeamIP.
+// if this is null or doesn't connect, it will register itself and get team ip
+// if the ip is not the same as itself, it then connects to this ip to start receiving jobs
+// otherwise it is the same ip, therefore it is itself the leader, and will start working on jobs
+// and tell other workers that have by then connected to it, what to do
