@@ -15,6 +15,7 @@ public class test {
             for (Integer i = 0; i < 10000000; i++) {
                 byte[] currentHash = md.digest(i.toString().getBytes());
                 mapab.put(i, currentHash);
+
             }
             System.in.read();
         } catch (Exception ex) {

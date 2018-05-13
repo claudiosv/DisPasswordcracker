@@ -17,7 +17,7 @@ public class Task implements Runnable {
 
     public void run() {
         while (!shutdown) {
-            for (int i  = lowerBound; i <= upperBound && !shutdown; i++) {
+            for (Integer i = lowerBound; i <= upperBound && !shutdown; i++) {
                 // Calculate their hash
                 byte[] currentHash = md.digest(i.toString().getBytes());
                 // If the calculated hash equals the one given by the server, submit the integer
@@ -32,7 +32,7 @@ public class Task implements Runnable {
                 }
             }
         }
-        //invoke parent's IM DONE function
+        // invoke parent's IM DONE function
     }
 
     public void shutdown() {
