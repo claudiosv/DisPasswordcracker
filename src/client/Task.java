@@ -17,7 +17,7 @@ public class Task implements Runnable {
 
     public void run() {
         while (!shutdown) {
-            for (int  = lowerBound; i <= upperBound && !shutdown; i++) {
+            for (int i  = lowerBound; i <= upperBound && !shutdown; i++) {
                 // Calculate their hash
                 byte[] currentHash = md.digest(i.toString().getBytes());
                 // If the calculated hash equals the one given by the server, submit the integer
