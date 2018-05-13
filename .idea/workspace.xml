@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ea343cde-0e16-45e4-be69-e38872d9e335" name="Default" comment="" />
+    <list default="true" id="ea343cde-0e16-45e4-be69-e38872d9e335" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/Leader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/Leader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/Manager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/Manager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/client/plan.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/client/plan.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.class" beforeDir="false" afterPath="$PROJECT_DIR$/test.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/test.java" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -12,17 +20,8 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ServerCommInterface.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/server/ServerCommInterface.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="16" column="1" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ClientCommInterface.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/client/ClientCommInterface.java">
+      <file leaf-file-name="Worker.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/client/Worker.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="105">
               <caret line="7" selection-start-line="7" selection-end-line="7" />
@@ -30,23 +29,59 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Worker.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/client/Worker.java">
+      <file leaf-file-name="ClientCommInterface.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/client/ClientCommInterface.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+            <state relative-caret-position="90">
+              <caret line="6" column="52" selection-start-line="6" selection-start-column="41" selection-end-line="6" selection-end-column="52" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Leader.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="plan.txt" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/client/plan.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="420">
+              <caret line="28" column="64" selection-start-line="28" selection-start-column="64" selection-end-line="28" selection-end-column="64" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Task.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/client/Task.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Leader.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/client/Leader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="22" column="29" selection-start-line="22" selection-start-column="29" selection-end-line="22" selection-end-column="29" />
+            <state relative-caret-position="75">
+              <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Manager.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/client/Manager.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="441">
+              <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
               <folding>
-                <element signature="e#0#466#0" expanded="true" />
+                <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Client.java" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Desktop/ChatSystem/Client.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="304">
+              <caret line="44" column="59" selection-start-line="41" selection-start-column="28" selection-end-line="44" selection-end-column="59" />
             </state>
           </provider>
         </entry>
@@ -60,6 +95,9 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
@@ -67,43 +105,47 @@
         <option value="$PROJECT_DIR$/src/client/ClientCommInterface.java" />
         <option value="$PROJECT_DIR$/src/server/ServerCommInterface.java" />
         <option value="$PROJECT_DIR$/src/client/Worker.java" />
+        <option value="$PROJECT_DIR$/src/client/Leader.java" />
+        <option value="$PROJECT_DIR$/src/client/Manager.java" />
+        <option value="$PROJECT_DIR$/src/client/plan.txt" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="x" value="151" />
-    <option name="y" value="33" />
-    <option name="width" value="1400" />
-    <option name="height" value="918" />
+    <option name="x" value="-140" />
+    <option name="y" value="-1080" />
+    <option name="width" value="1920" />
+    <option name="height" value="1080" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
-              <item name="NutCracker" type="b2602c69:ProjectViewProjectNode" />
-              <item name="NutCracker" type="462c0819:PsiDirectoryNode" />
+              <item name="DisPasswordcracker" type="b2602c69:ProjectViewProjectNode" />
+              <item name="DisPasswordcracker" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="NutCracker" type="b2602c69:ProjectViewProjectNode" />
-              <item name="NutCracker" type="462c0819:PsiDirectoryNode" />
+              <item name="DisPasswordcracker" type="b2602c69:ProjectViewProjectNode" />
+              <item name="DisPasswordcracker" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="NutCracker" type="b2602c69:ProjectViewProjectNode" />
-              <item name="NutCracker" type="462c0819:PsiDirectoryNode" />
+              <item name="DisPasswordcracker" type="b2602c69:ProjectViewProjectNode" />
+              <item name="DisPasswordcracker" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="client" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="NutCracker" type="b2602c69:ProjectViewProjectNode" />
-              <item name="NutCracker" type="462c0819:PsiDirectoryNode" />
+              <item name="DisPasswordcracker" type="b2602c69:ProjectViewProjectNode" />
+              <item name="DisPasswordcracker" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="server" type="462c0819:PsiDirectoryNode" />
             </path>
@@ -111,12 +153,12 @@
           <select />
         </subPane>
       </pane>
-      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -174,14 +216,16 @@
       <workItem from="1525957054655" duration="521000" />
       <workItem from="1526024743175" duration="7000" />
       <workItem from="1526214451656" duration="960000" />
+      <workItem from="1526229227278" duration="3061000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1906000" />
+    <option name="totallyTimeSpent" value="4967000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="7" />
       <window_info anchor="right" id="Palette&#9;" order="7" />
@@ -191,11 +235,11 @@
       <window_info anchor="right" id="Maven Projects" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Run" order="3" />
-      <window_info anchor="bottom" id="Version Control" order="10" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="10" />
       <window_info anchor="bottom" id="Terminal" order="9" visible="true" weight="0.28923076" />
       <window_info id="Capture Tool" order="3" />
       <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4991274" visible="true" weight="0.25885227" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4991274" visible="true" weight="0.26190478" />
       <window_info anchor="right" id="Database" order="5" />
       <window_info id="Structure" order="1" sideWeight="0.5008726" side_tool="true" weight="0.24969475" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -215,6 +259,34 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/server/ServerCommInterface.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="16" column="1" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/ClientCommInterface.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" selection-start-line="7" selection-end-line="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/Worker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/Leader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/server/ServerCommInterface.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
@@ -251,34 +323,76 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Aufgabe 3 - MD5.pdf" />
+    <entry file="file://$PROJECT_DIR$/src/client/Leader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/server/ServerCommInterface.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
+        <state relative-caret-position="210">
           <caret line="16" column="1" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/client/ClientCommInterface.java">
+    <entry file="file://$PROJECT_DIR$/src/server/ServerCommHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" selection-start-line="7" selection-end-line="7" />
+        <state relative-caret-position="208">
+          <caret line="41" column="69" selection-start-line="41" selection-start-column="69" selection-end-line="41" selection-end-column="69" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="405">
+          <caret line="30" column="9" lean-forward="true" selection-start-line="30" selection-start-column="9" selection-end-line="30" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Desktop/ChatSystem/Client.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="304">
+          <caret line="44" column="59" selection-start-line="41" selection-start-column="28" selection-end-line="44" selection-end-column="59" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/client/Worker.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
-          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+          <caret line="7" selection-start-line="7" selection-end-line="7" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/client/Leader.java">
+    <entry file="file://$PROJECT_DIR$/src/client/ClientCommInterface.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="22" column="29" selection-start-line="22" selection-start-column="29" selection-end-line="22" selection-end-column="29" />
+        <state relative-caret-position="90">
+          <caret line="6" column="52" selection-start-line="6" selection-start-column="41" selection-end-line="6" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/Task.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/Manager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="441">
+          <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
           <folding>
-            <element signature="e#0#466#0" expanded="true" />
+            <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/plan.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="28" column="64" selection-start-line="28" selection-start-column="64" selection-end-line="28" selection-end-column="64" />
         </state>
       </provider>
     </entry>

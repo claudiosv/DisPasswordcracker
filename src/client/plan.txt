@@ -16,3 +16,14 @@
 // if the ip is not the same as itself, it then connects to this ip to start receiving jobs
 // otherwise it is the same ip, therefore it is itself the leader, and will start working on jobs
 // and tell other workers that have by then connected to it, what to do
+
+
+// accepts as args the -leader flag and a number which represents the number of cores
+
+
+// v1 fill table with 3 RPI -no-interrupts when 4th joins nothing happends, if 1 is disconnected the payload of the 1 will be computed from the 4th
+//
+
+!!!!!!!!            SPEED TRICKS            !!!!!!!!!!!
+!! Cache the hashmap                                 !!
+- - !! Overwrite the hashcode method of the Integer class!! - -
