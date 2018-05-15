@@ -1,14 +1,13 @@
 package client;
 
 import java.security.MessageDigest;
-import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Task implements Runnable {
 
     private int lowerBound;
     private int upperBound;
-   // byte[] problemHash;
+
     MessageDigest md;
     private volatile boolean shutdown;
     private ConcurrentHashMap<byte[], Integer> mainHashmap;
