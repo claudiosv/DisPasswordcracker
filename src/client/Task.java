@@ -2,19 +2,22 @@ package client;
 
 import java.security.MessageDigest;
 import java.util.Arrays;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Task implements Runnable {
 
     private int lowerBound;
     private int upperBound;
-    byte[] problemHash;
+   // byte[] problemHash;
     MessageDigest md;
     private volatile boolean shutdown;
+    private ConcurrentHashMap<byte[], Integer> mainHashmap;
 
-    public Task(int lowerBound, int upperBound, byte[] problemHash) {
+    public Task(ConcurrentHashMap<byte[], Integer> mainHashmap, int lowerBound, int upperBound){//, byte[] problemHash) {
+        this.mainHashmap = mainHashmap;
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
-        this.problemHash = problemHash;
+        //this.problemHash = problemHash;
         this.shutdown = false;
     }
 
@@ -25,16 +28,17 @@ public class Task implements Runnable {
                 for (Integer i = lowerBound; i <= upperBound && !shutdown; i++) {
                     // Calculate their hash
                     byte[] currentHash = md.digest(i.toString().getBytes());
+                    mainHashmap.put(currentHash, i);
                     // If the calculated hash equals the one given by the server, submit the integer
                     // as solution
-                    if (Arrays.equals(currentHash, problemHash)) {
+                    //if (Arrays.equals(currentHash, problemHash)) {
                         // System.out.println("Client submits solution: " + i);
                         // sci.submitSolution("TheCoolTeam", "Cool1234", i.toString());
 
                         // SOLUTION FOUND!!!
-                        this.shutdown();
-                        break;
-                    }
+                        //this.shutdown();
+                        //break;
+                    //}
                 }
             }
         }catch (Exception ex){}
