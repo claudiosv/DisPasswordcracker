@@ -12,6 +12,6 @@ public interface ServerCommInterface extends Remote {
 	
 	public void submitSolution(String name, String teamCode, String sol) throws Exception;
 
-        public String getTeamIP(String teamName, String teamCode) throws Exception;
+	public String getTeamIP(String teamName, String teamCode) throws Exception;
 
 }
