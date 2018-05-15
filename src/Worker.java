@@ -1,3 +1,5 @@
+import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -18,6 +20,15 @@ public class Worker {
 
     public void startAsClient()
     {
+        try
+        {
+            Socket serverSocket = new Socket("127.0.0.1", 3333);
+            currentLeader = new BackgroundSocket(serverSocket);
+            currentLeader.start();
+        } catch (IOException ex)
+        {
+
+        }
 
     }
 
