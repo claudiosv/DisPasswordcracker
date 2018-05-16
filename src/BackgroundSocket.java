@@ -38,11 +38,9 @@ public class BackgroundSocket extends Thread {
             out.close();
             clientSocket.close();
         } catch (IOException iEx) {
-            if(iEx.getMessage().equals("Connection reset"))
-            {
+            if (iEx.getMessage().equals("Connection reset")) {
                 System.out.println("Socket disconnected");
-            }
-            else {
+            } else {
                 iEx.printStackTrace();
             }
         }

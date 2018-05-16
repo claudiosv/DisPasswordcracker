@@ -86,9 +86,9 @@ public class Worker {
 
     }
     //shouldn't we use Integer instead of int?
-    public void sendSolution(int solution, String problem)
+    public void sendSolution(String problem, boolean solved, int solution)
     {
-        Worker.getInstance().currentLeader.sendRequest("SOLVED" + " " + solution + " " + problem );
+        Worker.getInstance().currentLeader.sendRequest("SOLVED" + " " + (solved ? "YES " : "NO ") + solution + " " + problem );
     }
 
     public void searchHashes(String problem)
@@ -97,10 +97,10 @@ public class Worker {
         //simple n search for the correct key
         Integer solution = hashesMap.get(problem.getBytes());
         if(solution != null){
-            Worker.getInstance().sendSolution(solution, problem);
+            Worker.getInstance().sendSolution(problem, true, solution);
         }else {
             //no solution found in my map
-            System.out.println("Fok!");
+            Worker.getInstance().sendSolution(problem, false, 0);
         }
     }
 }
