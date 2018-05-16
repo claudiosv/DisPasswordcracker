@@ -11,6 +11,7 @@ public class Worker {
     public BackgroundSocket currentLeader = null;
     public ConcurrentHashMap<byte[], Integer> hashesMap = null;
     public String currentProblem = null;
+    public ServerListener currentServerListener = null;
 
     private Worker() { }
 
@@ -25,17 +26,17 @@ public class Worker {
         {
             Socket serverSocket = new Socket("127.0.0.1", 3333);
             currentLeader = new BackgroundSocket(serverSocket);
-            currentLeader.start();
+            currentLeader.run();
         } catch (IOException ex)
         {
-
+            ex.printStackTrace();
         }
-
     }
 
     public void startAsServer()
     {
-
+        currentServerListener = new ServerListener(3333);
+        currentServerListener.run();
     }
 
     public void parsePacket(String packet)
@@ -50,13 +51,6 @@ public class Worker {
                 // work all integers in the range
                 Worker.getInstance().processRange(Integer.parseInt(contents[1]) , Integer.parseInt(contents[2]));
                 break;
-            case "CURR": // CURR 500
-                // updates the worker on the current pool max so that in case the leader is
-                // lost,
-                // the client can assume leader position and work from there
-            case "MORE": // MORE
-                // this is something only the leader can reply to
-                // reply error NOT LEADER if mistaken, otherwise send new WORK packet
             case "IPLIST": // IPLIST 127.0.0.1 127.0.0.2
                 // if leader, inform the client of the current other members in pool
                 // this way, the clients can pick the lowest ip as the new leader

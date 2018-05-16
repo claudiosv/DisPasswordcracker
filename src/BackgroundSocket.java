@@ -13,8 +13,13 @@ public class BackgroundSocket extends Thread {
         this.clientSocket = socket;
     }
 
+    @Override
     public void run() {
         listen();
+    }
+
+    public String getRemoteIP() {
+        return clientSocket.getRemoteSocketAddress().toString();
     }
 
     public void listen() {
@@ -24,27 +29,24 @@ public class BackgroundSocket extends Thread {
 
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
-                //process inputLine
+                // process inputLine
                 Worker.getInstance().parsePacket(inputLine);
-                //out.println(inputLine);
+                // out.println(inputLine);
             }
 
             in.close();
             out.close();
             clientSocket.close();
-        } catch (IOException iEx)
-        {
+        } catch (IOException iEx) {
             iEx.printStackTrace();
         }
     }
 
-    public void sendRequest(String inputLine)
-    {
+    public void sendRequest(String inputLine) {
         try {
             out = new PrintWriter(clientSocket.getOutputStream(), true);
             out.println(inputLine);
-        } catch (IOException iEx)
-        {
+        } catch (IOException iEx) {
             iEx.printStackTrace();
         }
     }

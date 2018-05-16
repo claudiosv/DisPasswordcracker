@@ -2,7 +2,7 @@ package nutt;
 
 import java.rmi.Remote;
 
-import client.ClientCommInterface;
+import nutt.ClientCommInterface;
 
 public interface ServerCommInterface extends Remote {
 	
