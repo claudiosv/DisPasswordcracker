@@ -1,17 +1,24 @@
+import commInterfaces.*;
+
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.Socket;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.security.MessageDigest;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.rmi.Naming;
 
 public class Worker {
     private static Worker workerSingleton = null;
     public String currentLeaderIP = null;
-    public ArrayList<BackgroundSocket> connectedClients = null;
+    public List<BackgroundSocket> connectedClients = null;
     public BackgroundSocket currentLeader = null;
     public ConcurrentHashMap<byte[], Integer> hashesMap = null;
-    public String currentProblem = null;
+    //public String currentProblem = null; -> saved in ClientCommHandler
     public ServerListener currentServerListener = null;
+    public List<Interval> initialIntervals = null;
 
     private Worker() {
         hashesMap = new ConcurrentHashMap<>();
@@ -39,6 +46,41 @@ public class Worker {
     {
         currentServerListener = new ServerListener(3333);
         currentServerListener.run();
+        int initialProblemSize = 10000000; //this is a guess
+
+        // 0: Lookup the server
+        // Note: Insert the IP-address or the domain name of the host
+        // where your server is running
+        try {
+            ServerCommInterface sci = (ServerCommInterface) Naming.lookup("rmi://actarus.inf.unibz.it/server");
+
+            //get ready to comunicate
+            // create new client comm handler
+            ClientCommHandler cch = new ClientCommHandler();
+
+            // 1: registers with the server
+            sci.register("ThatDamnGPU", "TDGPU", cch );
+
+            /*----- All this part could be implemented differently  cause must be smart now it is suuuper dumb -----*/
+            // 2: start hashing -> send ranges
+            // we must keep the current status of the work
+
+
+            // 3: wait for problem hash from server
+            while(cch.currProblem == null ){/*wait*/}
+
+            // 4: start searching
+            currentServerListener.shareProblemHash(cch.currProblem);
+
+            /*^^^^^ All this part could be implemented differently  cause must be smart now it is suuuper dumb ^^^^^*/
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
+
     }
 
     public void parsePacket(String packet)
@@ -78,7 +120,7 @@ public class Worker {
                 hashesMap.put(hash, i);
             }
             long endTime = System.nanoTime();
-            System.out.println("Hashing took " + (endTime-startTime));
+            System.out.println("Hashing took: " + (endTime-startTime));
         } catch (Exception e) {
             e.printStackTrace();
         }

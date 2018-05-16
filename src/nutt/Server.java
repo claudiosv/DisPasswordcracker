@@ -27,7 +27,7 @@ public class Server {
 		Naming.rebind("server", sc);
 		
 		// Sleep for 10 seconds to give clients time to register before giving the first task
-		// But it is also possible to register later...
+		// But it is also possible to register later... 
 		System.out.println("Server has started...");
 		Thread.sleep(10000);
 		System.out.println("Server gives the first problem...");

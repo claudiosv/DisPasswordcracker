@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ServerListener extends Thread {
@@ -31,7 +32,7 @@ public class ServerListener extends Thread {
         serverSocket.close();
     }
 
-    public List<String> getConnectedIPs() //
+    public List<String> getConnectedIPs()
     {
         List<String> ips = new ArrayList<>();
         for (BackgroundSocket client : backgroundSockets) {
@@ -39,4 +40,15 @@ public class ServerListener extends Thread {
         }
         return ips;
     }
+
+    //a method to sync the state of work should be implemented
+
+    //for now it's void but than could return smth to notify about the status
+    public void shareProblemHash(byte[] hash){
+        for (BackgroundSocket bs : backgroundSockets) {
+            bs.sendRequest("SOLVE " + Arrays.toString(hash)); //does it send the correct data?
+        }
+    }
+
+
 }

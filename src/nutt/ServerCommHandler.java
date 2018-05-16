@@ -61,7 +61,7 @@ public class ServerCommHandler extends UnicastRemoteObject implements ServerComm
 			System.out.println("    Team " + teamName + " reregisters with new contact point");
 			myClientMap.put(teamName, cc); // overrides old cc reference
 			myIPMap.put(teamName, getClientHost()); // remembers IP address of contact point
-			cc.publishProblem(currentHash, Server.PROBLEMSIZE);
+			cc.publishProblem(currentHash, Server.PROBLEMSIZE); 
 		}
 	}
 

@@ -1,4 +1,4 @@
-package nutt;
+package commInterfaces;
 
 import java.rmi.Remote;
 
