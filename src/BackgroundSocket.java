@@ -38,7 +38,13 @@ public class BackgroundSocket extends Thread {
             out.close();
             clientSocket.close();
         } catch (IOException iEx) {
-            iEx.printStackTrace();
+            if(iEx.getMessage().equals("Connection reset"))
+            {
+                System.out.println("Socket disconnected");
+            }
+            else {
+                iEx.printStackTrace();
+            }
         }
     }
 
@@ -46,6 +52,7 @@ public class BackgroundSocket extends Thread {
         try {
             out = new PrintWriter(clientSocket.getOutputStream(), true);
             out.println(inputLine);
+            System.out.println(inputLine);
         } catch (IOException iEx) {
             iEx.printStackTrace();
         }

@@ -13,7 +13,9 @@ public class Worker {
     public String currentProblem = null;
     public ServerListener currentServerListener = null;
 
-    private Worker() { }
+    private Worker() {
+        hashesMap = new ConcurrentHashMap<>();
+    }
 
     public static Worker getInstance( ) {
         if(workerSingleton == null) workerSingleton = new Worker();
@@ -41,6 +43,7 @@ public class Worker {
 
     public void parsePacket(String packet)
     {
+        System.out.println("Debug: " + packet);
         String[] contents = packet.split(" ");
 
         switch (contents[0]) {
@@ -69,14 +72,17 @@ public class Worker {
         try {
             MessageDigest digester = MessageDigest.getInstance("MD5");
             byte[] hash;
+            long startTime = System.nanoTime();
             for (Integer i = lowerBound; i < upperBound; i++){
                 hash = digester.digest(i.toString().getBytes());
                 hashesMap.put(hash, i);
             }
+            long endTime = System.nanoTime();
+            System.out.println("Hashing took " + (endTime-startTime));
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        System.out.println("Finished range");
 
     }
     //shouldn't we use Integer instead of int?

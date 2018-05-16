@@ -22,6 +22,7 @@ public class ServerListener extends Thread {
                 BackgroundSocket bs = new BackgroundSocket(serverSocket.accept()); 
                 backgroundSockets.add(bs);
                 bs.start();
+                bs.sendRequest("RANGE 0 100");
             }
         } catch (IOException ex){ex.printStackTrace();}
     }
