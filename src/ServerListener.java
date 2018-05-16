@@ -10,6 +10,7 @@ public class ServerListener extends Thread {
 
     public ServerListener (int port){
         this.port = port;
+        backgroundSockets = new ArrayList<>();
     }
 
     @Override
