@@ -15,7 +15,7 @@ public class Worker {
     public String currentLeaderIP = null;
     public List<BackgroundSocket> connectedClients = null;
     public BackgroundSocket currentLeader = null;
-    public ConcurrentHashMap<byte[], Integer> hashesMap = null;
+    public ConcurrentHashMap<String, Integer> hashesMap = null;
     //public String currentProblem = null; -> saved in ClientCommHandler
     public ServerListener currentServerListener = null;
     public List<Interval> initialIntervals = null;
@@ -92,6 +92,7 @@ public class Worker {
             case "SOLVE": // SOLVE 0957u387r84r7thisisahash98fre98
                 // search hashmap
                 Worker.getInstance().searchHashes(contents[1]);
+                break;
             case "RANGE": // e.g. RANGE 500-1000
                 // work all integers in the range
                 Worker.getInstance().processRange(Integer.parseInt(contents[1]) , Integer.parseInt(contents[2]));
@@ -117,7 +118,7 @@ public class Worker {
             long startTime = System.nanoTime();
             for (Integer i = lowerBound; i < upperBound; i++){
                 hash = digester.digest(i.toString().getBytes());
-                hashesMap.put(hash, i);
+                hashesMap.put(ServerListener.byteArrayToHex(hash), i);
             }
             long endTime = System.nanoTime();
             System.out.println("Hashing took: " + (endTime-startTime));
@@ -137,7 +138,9 @@ public class Worker {
     {
         // -> currentProblem updated here?
         //simple n search for the correct key
-        Integer solution = hashesMap.get(problem.getBytes());
+
+
+        Integer solution = hashesMap.get(problem);
         if(solution != null){
             Worker.getInstance().sendSolution(problem, true, solution);
         }else {

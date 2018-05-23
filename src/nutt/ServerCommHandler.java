@@ -1,5 +1,8 @@
 package nutt;
 
+import commInterfaces.ClientCommInterface;
+import commInterfaces.ServerCommInterface;
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.security.MessageDigest;
