@@ -23,9 +23,8 @@ public class ServerListener extends Thread {
                 BackgroundSocket bs = new BackgroundSocket(serverSocket.accept()); 
                 backgroundSockets.add(bs);
                 bs.start();
-                bs.sendRequest("RANGE 0 10000000"); //10000000
-                bs.sendRequest("SOLVE 6F908D8330A81A42A7F9C4120AFBEA5D"); //10000000 "6F908D8330A81A42A7F9C4120AFBEA5D" -> "6579843"
-
+                bs.sendRequest("RANGE 0 10000000");
+               // bs.sendRequest("SOLVE 6F908D8330A81A42A7F9C4120AFBEA5D"); //10000000 "6F908D8330A81A42A7F9C4120AFBEA5D" -> "6579843"
             }
         } catch (IOException ex){ex.printStackTrace();}
     }
