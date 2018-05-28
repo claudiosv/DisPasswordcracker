@@ -1,3 +1,4 @@
+package benchmark;
 public class TestThread extends Thread {
     private volatile boolean exit = false;
     @Override

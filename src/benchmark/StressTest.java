@@ -1,3 +1,4 @@
+package benchmark;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.MessageDigest;

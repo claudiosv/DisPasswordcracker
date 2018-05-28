@@ -1,3 +1,4 @@
+package benchmark;
 import java.security.MessageDigest;
 import java.util.concurrent.ConcurrentHashMap;
 

@@ -14,8 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-
-public class ServerCommHandler extends UnicastRemoteObject implements ServerCommInterface {
+public class ServerCommHandler extends UnicastRemoteObject implements ClientCommInterface {
 
 	private static final long serialVersionUID = -753493834709721813L;
 	private ConcurrentHashMap<String, String> myCodeMap;
