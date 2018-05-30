@@ -27,7 +27,7 @@ public class ServerListener extends Thread {
                 System.out.println("Debug: ip added = " + bs.getIP());
                 bs.start();
                 //first time connection send the IPLIST!
-                shareIPs(bs.getIP());
+                updateIPs();
                // bs.sendRequest("SOLVE 6F908D8330A81A42A7F9C4120AFBEA5D"); //10000000 "6F908D8330A81A42A7F9C4120AFBEA5D" -> "6579843"
             }
         } catch (IOException ex){ex.printStackTrace();}
@@ -37,6 +37,7 @@ public class ServerListener extends Thread {
         serverSocket.close();
     }
 
+    //extracts form the map the ips
     public List<String> getConnectedIPs()
     {
         return new ArrayList<>(backgroundSockets.keySet());
@@ -59,6 +60,7 @@ public class ServerListener extends Thread {
         broadcastRequest(stringBuilder.toString());
     }
 
+    //debug but could be useful
     public void shareIPs(String clientIP){
         StringBuilder stringBuilder = new StringBuilder("IPLIST ");
         for (String IP: getConnectedIPs()) {

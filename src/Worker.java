@@ -20,7 +20,7 @@ public class Worker {
     public ServerListener currentServerListener = null;
     public List<Interval> initialIntervals = null;
     public int port = 3333;
-    private boolean isServer = false;
+    private boolean isServer = false; //debug but could be useful
 
     private Worker() {
         hashesMap = new ConcurrentHashMap<>();
@@ -98,17 +98,11 @@ public class Worker {
                 // leader informs workers to stop all work on this hash (since a solution is
                 // found)
                 break;
-//            case "DISCOVERY":
-//                //only the server would respond to this
-//                //the server sends back a response and than the list of all ips
-//                if(isServer)
-//                    currentServerListener.shareIPs(remoteIP);
-//                break;
             case "IPLIST": // IPLIST 127.0.0.1 127.0.0.2
                 // if leader, inform the client of the current other members in pool
                 // this way, the clients can pick the lowest ip as the new leader
                 // the new leader will have to reregister!!!!
-                ArrayList<String> newIPList = null;
+                ArrayList<String> newIPList = new ArrayList<>();
                 for (int i = 1; i < contents.length; i++) {
                     newIPList.add(contents[i]);
                 }
@@ -129,10 +123,13 @@ public class Worker {
         String hostTested = "";
         Socket probableLeaderConnection = null;
         BackgroundSocket probableLeaderSocket = null;
+        String myIP = null;
     try {
+        myIP = InetAddress.getLocalHost().getHostAddress();
+        System.out.println("My IP is : " + myIP);
         for (int i = 0; i <= 255; i++) {
             hostTested = subnet + "." + i;
-            if (InetAddress.getByName(hostTested).isReachable(timeout)) {
+            if (!hostTested.equalsIgnoreCase(myIP) && InetAddress.getByName(hostTested).isReachable(timeout)) {
                 System.out.println("Connecting to: " + hostTested);
                 try {
                     probableLeaderConnection = new Socket(hostTested, port);
@@ -141,7 +138,6 @@ public class Worker {
                     return probableLeaderSocket;
                 } catch (IOException e) {
                     System.out.println("Debug: Hitted client! IP => " + hostTested );
-                    //also hitting itself haha
                 }
             }
         }
@@ -151,6 +147,7 @@ public class Worker {
         System.out.println("UNABLE TO FIND LEADER");
         return null;
     }
+
     public void processRange(int lowerBound, int upperBound)
     {   //upper EXCLUSIVE
         try {
