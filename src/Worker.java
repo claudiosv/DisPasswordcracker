@@ -1,10 +1,7 @@
 import commInterfaces.*;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.Socket;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 import java.security.MessageDigest;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,12 +10,13 @@ import java.rmi.Naming;
 public class Worker {
     private static Worker workerSingleton = null;
     public String currentLeaderIP = null;
-    public List<BackgroundSocket> connectedClients = null;
+    public List<BackgroundSocket> connectedClients = null; //only for the server
+    public List<String> connectedIPs = null; //for the clients that remains updated with thw state of the net
     public BackgroundSocket currentLeader = null;
     public ConcurrentHashMap<String, Integer> hashesMap = null;
-    //public String currentProblem = null; -> saved in ClientCommHandler
     public ServerListener currentServerListener = null;
     public List<Interval> initialIntervals = null;
+    public int port = 3333;
 
     private Worker() {
         hashesMap = new ConcurrentHashMap<>();
@@ -44,7 +42,7 @@ public class Worker {
 
     public void startAsServer()
     {
-        currentServerListener = new ServerListener(3333);
+        currentServerListener = new ServerListener(port);
         currentServerListener.run();
         int initialProblemSize = 10000000; //this is a guess
 
@@ -77,13 +75,9 @@ public class Worker {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
-
     }
 
-    public void parsePacket(String packet)
+    public void parsePacket(String packet, String remoteIP)
     {
         System.out.println("Debug: " + packet);
         String[] contents = packet.split(" ");
@@ -107,6 +101,13 @@ public class Worker {
             case "STOP": // STOP 0957u387r84r7thisisahash98fre98
                 // leader informs workers to stop all work on this hash (since a solution is
                 // found)
+            case "DISCOVERY":
+                //only the server would receive this
+                //the server sends back a response and than the list of all ips
+
+            case "UPDATE":
+                //this would be received from the clients when one (but not the server) is down
+                //could be helpful in to update the ip list
         }
     }
 

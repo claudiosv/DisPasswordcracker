@@ -2,16 +2,17 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class ServerListener extends Thread {
     private ServerSocket serverSocket;
-    private ArrayList<BackgroundSocket> backgroundSockets;
+    private HashMap<String, BackgroundSocket> backgroundSockets; // HashMap<String, BackgroundSocket>
     private int port;
 
     public ServerListener (int port){
         this.port = port;
-        backgroundSockets = new ArrayList<>();
+        backgroundSockets = new HashMap<>();
     }
 
     @Override
@@ -21,7 +22,7 @@ public class ServerListener extends Thread {
             while (true)
             {
                 BackgroundSocket bs = new BackgroundSocket(serverSocket.accept()); 
-                backgroundSockets.add(bs);
+                backgroundSockets.put(bs.getIP(), bs); // set the ip as key
                 bs.start();
                 bs.sendRequest("RANGE 0 10000000");
                // bs.sendRequest("SOLVE 6F908D8330A81A42A7F9C4120AFBEA5D"); //10000000 "6F908D8330A81A42A7F9C4120AFBEA5D" -> "6579843"
@@ -35,18 +36,14 @@ public class ServerListener extends Thread {
 
     public List<String> getConnectedIPs()
     {
-        List<String> ips = new ArrayList<>();
-        for (BackgroundSocket client : backgroundSockets) {
-            ips.add(client.getRemoteIP());
-        }
-        return ips;
+        return new ArrayList<>(backgroundSockets.keySet());
     }
 
     //a method to sync the state of work should be implemented
 
     //for now it's void but than could return smth to notify about the status
     public void shareProblemHash(byte[] hash){
-        for (BackgroundSocket bs : backgroundSockets) {
+        for (BackgroundSocket bs : backgroundSockets.values()) {
             bs.sendRequest("SOLVE " + byteArrayToHex(hash)); //does it send the correct data?
         }
     }
@@ -61,5 +58,10 @@ public class ServerListener extends Thread {
             hexChars[j * 2 + 1] = hexArray[v & 0x0F];
         }
         return new String(hexChars);
+    }
+
+    public void routeRequest(String inputLine, String clientIP){ //used to route the packet to the right IP
+        BackgroundSocket destination = backgroundSockets.get(clientIP);
+        destination.sendRequest(inputLine);
     }
 }

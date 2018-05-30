@@ -15,12 +15,14 @@ public class BackgroundSocket extends Thread {
 
     @Override
     public void run() {
+        System.out.println("Remote: " + getRemoteIP() + " ----- Inet: " + getIP() );
         listen();
     }
 
     public String getRemoteIP() {
         return clientSocket.getRemoteSocketAddress().toString();
     }
+    public String getIP(){return clientSocket.getInetAddress().getHostAddress(); }
 
     public void listen() {
         try {
@@ -30,7 +32,7 @@ public class BackgroundSocket extends Thread {
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 // process inputLine
-                Worker.getInstance().parsePacket(inputLine);
+                Worker.getInstance().parsePacket(inputLine, getIP());
                 // out.println(inputLine);
             }
 
