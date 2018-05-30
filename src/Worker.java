@@ -1,7 +1,10 @@
 import commInterfaces.*;
 
 import java.io.IOException;
+import java.net.ConnectException;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +14,6 @@ import java.rmi.Naming;
 public class Worker {
     private static Worker workerSingleton = null;
     public String currentLeaderIP = null;
-    //public List<BackgroundSocket> connectedClients = null; //only for the server
     public List<String> connectedIPs = null; //for the clients that remains updated with thw state of the net
     public BackgroundSocket currentLeader = null;
     public ConcurrentHashMap<String, Integer> hashesMap = null;
@@ -29,18 +31,11 @@ public class Worker {
         return workerSingleton;
     }
 
-    public void startAsClient()
+    public void startAsClient(String subnet)
     {
-        //here goes the discovery part
-        try
-        {
-            Socket serverSocket = new Socket("127.0.0.1", 3333);
-            currentLeader = new BackgroundSocket(serverSocket);
-            currentLeader.run();
-        } catch (IOException ex)
-        {
-            ex.printStackTrace();
-        }
+        //here starts the discovery part
+        currentLeader = discoverLeader(subnet);
+        currentLeader.run();
     }
 
     public void startAsServer()
@@ -95,40 +90,67 @@ public class Worker {
                 // work all integers in the range
                 Worker.getInstance().processRange(Integer.parseInt(contents[1]) , Integer.parseInt(contents[2]));
                 break;
+            case "SOLVED": // SOLVED 0957u387r84r7thisisahash98fre98 666666
+                // only the leader receives this
+                System.out.println("The solution to " + contents[2] + " is: " + contents[1]);
+                break;
+            case "STOP": // STOP 0957u387r84r7thisisahash98fre98
+                // leader informs workers to stop all work on this hash (since a solution is
+                // found)
+                break;
+//            case "DISCOVERY":
+//                //only the server would respond to this
+//                //the server sends back a response and than the list of all ips
+//                if(isServer)
+//                    currentServerListener.shareIPs(remoteIP);
+//                break;
             case "IPLIST": // IPLIST 127.0.0.1 127.0.0.2
                 // if leader, inform the client of the current other members in pool
                 // this way, the clients can pick the lowest ip as the new leader
                 // the new leader will have to reregister!!!!
-            case "SOLVED": // SOLVED 0957u387r84r7thisisahash98fre98 666666
-                // only the leader receives this
-                System.out.println("The solution to " + contents[2] + " is: " + contents[1]);
-            case "STOP": // STOP 0957u387r84r7thisisahash98fre98
-                // leader informs workers to stop all work on this hash (since a solution is
-                // found)
-            case "DISCOVERY":
-                //only the server would respond to this
-                //the server sends back a response and than the list of all ips
-                if(isServer)
-                    currentServerListener.shareIPs(remoteIP);
-            case "UPDATE": //UPDATE + client/server + ip | UPDATE begin/end
-                //this would be also received by the clients when one (but not the server) is down
-                ArrayList<String> ipUpdate = null; //should implement try catch to make code more safe
-                if(contents[1].equalsIgnoreCase("begin")) {
-                    ipUpdate = new ArrayList<>();
-                } else if(contents[1].equalsIgnoreCase("client")){
-                    ipUpdate.add(contents[2]);
-                }else if(contents[1].equalsIgnoreCase("end")){
-                    connectedIPs = ipUpdate;
-                }else if (contents[1].equalsIgnoreCase("server")){
-                    //means that a new server is announcing itself on the network
-                    currentLeaderIP = contents[2];
-                    //update connection here! TODO
+                ArrayList<String> newIPList = null;
+                for (int i = 1; i < contents.length; i++) {
+                    newIPList.add(contents[i]);
                 }
+                connectedIPs = newIPList;
+                break;
+            case "ANNOUNCE": //ANNOUNCE server IP Every start of server this must be sent(important for the reconnection not for the first connection)
+                //means that a new server is announcing itself on the network
+                currentLeaderIP = contents[1];
+                //update connection of the client here! TODO
+                break;
             case "OFFLINE": //reached when a someone goes offline
-                
+                break;
         }
     }
 
+    public BackgroundSocket discoverLeader(String subnet){
+        int timeout = 10; //timeout in milliseconds to check the connection
+        String hostTested = "";
+        Socket probableLeaderConnection = null;
+        BackgroundSocket probableLeaderSocket = null;
+    try {
+        for (int i = 0; i <= 255; i++) {
+            hostTested = subnet + "." + i;
+            if (InetAddress.getByName(hostTested).isReachable(timeout)) {
+                System.out.println("Connecting to: " + hostTested);
+                try {
+                    probableLeaderConnection = new Socket(hostTested, port);
+                    probableLeaderSocket = new BackgroundSocket(probableLeaderConnection);
+                    currentLeaderIP = hostTested;
+                    return probableLeaderSocket;
+                } catch (IOException e) {
+                    System.out.println("Debug: Hitted client! IP => " + hostTested );
+                    //also hitting itself haha
+                }
+            }
+        }
+    } catch (IOException e){
+        e.printStackTrace();//DEBUG
+    }
+        System.out.println("UNABLE TO FIND LEADER");
+        return null;
+    }
     public void processRange(int lowerBound, int upperBound)
     {   //upper EXCLUSIVE
         try {

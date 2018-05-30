@@ -21,10 +21,13 @@ public class ServerListener extends Thread {
             serverSocket = new ServerSocket(port);
             while (true)
             {
+                System.out.println("Debug: server is listening");
                 BackgroundSocket bs = new BackgroundSocket(serverSocket.accept()); 
                 backgroundSockets.put(bs.getIP(), bs); // set the ip as key
+                System.out.println("Debug: ip added = " + bs.getIP());
                 bs.start();
-                bs.sendRequest("RANGE 0 10000000");
+                //first time connection send the IPLIST!
+                shareIPs(bs.getIP());
                // bs.sendRequest("SOLVE 6F908D8330A81A42A7F9C4120AFBEA5D"); //10000000 "6F908D8330A81A42A7F9C4120AFBEA5D" -> "6579843"
             }
         } catch (IOException ex){ex.printStackTrace();}
@@ -49,20 +52,19 @@ public class ServerListener extends Thread {
     }
 
     public void updateIPs(){
-        broadcastRequest("UPDATE begin");
+        StringBuilder stringBuilder = new StringBuilder("IPLIST ");
         for (String IP: getConnectedIPs()) {
-            broadcastRequest("UPDATE client " + IP);
+            stringBuilder.append(" " + IP);
         }
-        broadcastRequest("UPDATE end");
+        broadcastRequest(stringBuilder.toString());
     }
 
     public void shareIPs(String clientIP){
-        routeRequest("UPDATE begin" , clientIP);
+        StringBuilder stringBuilder = new StringBuilder("IPLIST ");
         for (String IP: getConnectedIPs()) {
-            if(!IP.equalsIgnoreCase(clientIP)) //share all other than the requesting client
-                routeRequest("UPDATE client " + IP, clientIP);
+            stringBuilder.append(" " + IP);
         }
-        routeRequest("UPDATE end" , clientIP);
+        routeRequest(stringBuilder.toString(), clientIP);
     }
 
     //https://stackoverflow.com/a/9855338

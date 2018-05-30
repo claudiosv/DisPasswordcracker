@@ -8,15 +8,29 @@ public class BackgroundSocket extends Thread {
     private Socket clientSocket;
     private PrintWriter out;
     private BufferedReader in;
+    private boolean discovery = false;
+    private int timeout;
+
 
     public BackgroundSocket(Socket socket) {
         this.clientSocket = socket;
     }
 
+    //intentional overload
+//    public BackgroundSocket(Socket socket, boolean discoveryState, int timeout) {
+//        this.clientSocket = socket;
+//        this.discovery = discoveryState;
+//        this.timeout = timeout;
+//    }
+
     @Override
     public void run() {
         System.out.println("Remote: " + getRemoteIP() + " ----- Inet: " + getIP() );
-        listen();
+        if(discovery){
+            discoveryProcedure();
+        } else {
+            listen();
+        }
     }
 
     public String getRemoteIP() {
@@ -48,7 +62,9 @@ public class BackgroundSocket extends Thread {
             }
         }
     }
+    public void discoveryProcedure(){
 
+    }
     public void sendRequest(String inputLine) {
         try {
             out = new PrintWriter(clientSocket.getOutputStream(), true);
