@@ -3,6 +3,7 @@ import commInterfaces.*;
 import java.io.IOException;
 import java.net.Socket;
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.rmi.Naming;
@@ -10,13 +11,14 @@ import java.rmi.Naming;
 public class Worker {
     private static Worker workerSingleton = null;
     public String currentLeaderIP = null;
-    public List<BackgroundSocket> connectedClients = null; //only for the server
+    //public List<BackgroundSocket> connectedClients = null; //only for the server
     public List<String> connectedIPs = null; //for the clients that remains updated with thw state of the net
     public BackgroundSocket currentLeader = null;
     public ConcurrentHashMap<String, Integer> hashesMap = null;
     public ServerListener currentServerListener = null;
     public List<Interval> initialIntervals = null;
     public int port = 3333;
+    private boolean isServer = false;
 
     private Worker() {
         hashesMap = new ConcurrentHashMap<>();
@@ -29,6 +31,7 @@ public class Worker {
 
     public void startAsClient()
     {
+        //here goes the discovery part
         try
         {
             Socket serverSocket = new Socket("127.0.0.1", 3333);
@@ -42,6 +45,7 @@ public class Worker {
 
     public void startAsServer()
     {
+        isServer = true;
         currentServerListener = new ServerListener(port);
         currentServerListener.run();
         int initialProblemSize = 10000000; //this is a guess
@@ -102,12 +106,26 @@ public class Worker {
                 // leader informs workers to stop all work on this hash (since a solution is
                 // found)
             case "DISCOVERY":
-                //only the server would receive this
+                //only the server would respond to this
                 //the server sends back a response and than the list of all ips
-
-            case "UPDATE":
-                //this would be received from the clients when one (but not the server) is down
-                //could be helpful in to update the ip list
+                if(isServer)
+                    currentServerListener.shareIPs(remoteIP);
+            case "UPDATE": //UPDATE + client/server + ip | UPDATE begin/end
+                //this would be also received by the clients when one (but not the server) is down
+                ArrayList<String> ipUpdate = null; //should implement try catch to make code more safe
+                if(contents[1].equalsIgnoreCase("begin")) {
+                    ipUpdate = new ArrayList<>();
+                } else if(contents[1].equalsIgnoreCase("client")){
+                    ipUpdate.add(contents[2]);
+                }else if(contents[1].equalsIgnoreCase("end")){
+                    connectedIPs = ipUpdate;
+                }else if (contents[1].equalsIgnoreCase("server")){
+                    //means that a new server is announcing itself on the network
+                    currentLeaderIP = contents[2];
+                    //update connection here! TODO
+                }
+            case "OFFLINE": //reached when a someone goes offline
+                
         }
     }
 

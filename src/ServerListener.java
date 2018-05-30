@@ -39,13 +39,30 @@ public class ServerListener extends Thread {
         return new ArrayList<>(backgroundSockets.keySet());
     }
 
-    //a method to sync the state of work should be implemented
+    //a method to sync the state of work should be implemented(more than one)
+    public static void notifyOffline(String offlineIP){ //called by bgsokect on disconnection
 
+    }
     //for now it's void but than could return smth to notify about the status
     public void shareProblemHash(byte[] hash){
-        for (BackgroundSocket bs : backgroundSockets.values()) {
-            bs.sendRequest("SOLVE " + byteArrayToHex(hash)); //does it send the correct data?
+        broadcastRequest("SOLVE " + byteArrayToHex(hash));
+    }
+
+    public void updateIPs(){
+        broadcastRequest("UPDATE begin");
+        for (String IP: getConnectedIPs()) {
+            broadcastRequest("UPDATE client " + IP);
         }
+        broadcastRequest("UPDATE end");
+    }
+
+    public void shareIPs(String clientIP){
+        routeRequest("UPDATE begin" , clientIP);
+        for (String IP: getConnectedIPs()) {
+            if(!IP.equalsIgnoreCase(clientIP)) //share all other than the requesting client
+                routeRequest("UPDATE client " + IP, clientIP);
+        }
+        routeRequest("UPDATE end" , clientIP);
     }
 
     //https://stackoverflow.com/a/9855338
@@ -63,5 +80,11 @@ public class ServerListener extends Thread {
     public void routeRequest(String inputLine, String clientIP){ //used to route the packet to the right IP
         BackgroundSocket destination = backgroundSockets.get(clientIP);
         destination.sendRequest(inputLine);
+    }
+
+    public void broadcastRequest(String inputLine){ //sends the packet to all the connected IPs
+        for (BackgroundSocket bs : backgroundSockets.values()) {
+            bs.sendRequest(inputLine);
+        }
     }
 }
