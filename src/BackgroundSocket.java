@@ -43,7 +43,7 @@ public class BackgroundSocket extends Thread {
     public String getRemoteIP() {
         return clientSocket.getInetAddress().getHostAddress();
     }
-    public String getIP(){
+    public String getIP(){ //SUPER SLOW USE IN CASE OF EMERGENCY
         if(myIP == null)
             try { myIP = InetAddress.getLocalHost().getHostAddress();} catch (UnknownHostException e) {}
         return myIP;
@@ -79,9 +79,7 @@ public class BackgroundSocket extends Thread {
     }
 
     public void dismiss(){
-        try {
-            awakeCheck.cancel();
-            currentThread().join(10); //close the thread
-        } catch (InterruptedException e) { }
+        awakeCheck.cancel();
+        currentThread().interrupt(); //close the thread
     }
 }

@@ -50,6 +50,7 @@ public class ServerListener extends Thread {
         //get and delete the offline client from the list
         backgroundSockets.get(offlineIP).dismiss();
         backgroundSockets.remove(offlineIP);
+        updateIPs();
         //redistribute work could go here!
     }
     //for now it's void but than could return smth to notify about the status

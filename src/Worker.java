@@ -3,6 +3,7 @@ import commInterfaces.*;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
@@ -145,10 +146,8 @@ public class Worker {
                 connectedIPs = newIPList;
                 //currentLeader.getIP();
                 break;
-            case "ANNOUNCE": //ANNOUNCE server IP Every start of server this must be sent(important for the reconnection not for the first connection)
-                //means that a new server is announcing itself on the network
-                currentLeaderIP = contents[1];
-                //update connection of the client here! TODO
+            case "PROGRESS":
+                //used each time the server commits the start if an activity to update everybody on its status
                 break;
         }
     }
@@ -161,7 +160,11 @@ public class Worker {
         } else if (!isServer && IP.equalsIgnoreCase(currentLeaderIP)){ //the server went down!
             //than that's a bit of a problem
             connectedIPs.remove(IP);
-            String myIPString = currentLeader.getIP();
+            currentLeader.dismiss();
+
+            String myIPString = null;
+            try { myIPString = InetAddress.getLocalHost().getHostAddress(); } catch (UnknownHostException e) {}
+
             int myIPNumber = Integer.parseInt(myIPString.split("\\.")[3]); //last 3 digit of my ip
 
             int minIP = myIPNumber;
