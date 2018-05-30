@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.rmi.Naming;
@@ -21,6 +22,8 @@ public class Worker {
     public int port = 3333;
     private boolean isServer = false;
     public String subnet;
+    public Integer problemSize, rangeSize;
+    public HashMap<String, Integer> ranges;
 
     private Worker() {
         hashesMap = new ConcurrentHashMap<>();
@@ -35,76 +38,48 @@ public class Worker {
     {
         this.subnet = subnet;
         //here starts the discovery part
+        while (currentLeader == null){
         currentLeader = discoverLeader(this.subnet);
-        currentLeader.run();
+        }
+        currentLeader.run();//this run is ok
     }
 
-    public void startAsServer()
+    public void startAsServer(boolean recover)
     {
         isServer = true;
         currentServerListener = new ServerListener(port);
-        currentServerListener.run();
-        int initialProblemSize = 10000000; //this is a guess
+        currentServerListener.start();
+        int guessedProblemSize = 10000000; //this is a guess
 
         // 0: Lookup the server
         // Note: Insert the IP-address or the domain name of the host
         // where your server is running
         try {
-            ServerCommInterface sci = (ServerCommInterface) Naming.lookup("rmi://actarus.inf.unibz.it/server");
+            //ServerCommInterface sci = (ServerCommInterface) Naming.lookup("rmi://actarus.inf.unibz.it/server");
 
             //get ready to comunicate
             // create new client comm handler
-            ClientCommHandler cch = new ClientCommHandler();
+            //ClientCommHandler cch = new ClientCommHandler();
 
             // 1: registers with the server
-            sci.register("ThatDamnGPU", "TDGPU", cch );
+            if(recover){
+                System.out.println("Debug: reregistered simulation");
+                //sci.reregister("ThatDamnGPU", "TDGPU", cch );
+                // 2b: check the previous status(last range) and resume
+            } else {
+                System.out.println("Debug: registered simulation");
+                //sci.register("ThatDamnGPU", "TDGPU", cch );
+                // 2a: start hashing -> send ranges
+                currentServerListener.hashSetup(guessedProblemSize, guessedProblemSize/1000); //divide in 10 chunks
 
-            /*----- All this part could be implemented differently  cause must be smart now it is suuuper dumb -----*/
-            // 2: start hashing -> send ranges
-            // we must keep the current status of the work
-
-
-            // 3: wait for problem hash from server
-            while(cch.currProblem == null ){/*wait*/}
-
-            // 4: start searching
-            currentServerListener.shareProblemHash(cch.currProblem);
-
-            /*^^^^^ All this part could be implemented differently  cause must be smart now it is suuuper dumb ^^^^^*/
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void recoverAsServer(){
-        isServer = true;
-        currentServerListener = new ServerListener(port);
-        currentServerListener.run();
-
-        // 0: Lookup the server
-        // Note: Insert the IP-address or the domain name of the host
-        // where your server is running
-        try {
-            ServerCommInterface sci = (ServerCommInterface) Naming.lookup("rmi://actarus.inf.unibz.it/server");
-
-            //get ready to comunicate
-            // create new client comm handler
-            ClientCommHandler cch = new ClientCommHandler();
-
-            // 1: registers with the server
-            sci.reregister("ThatDamnGPU", "TDGPU", cch );
-
-            /*----- All this part could be implemented differently  cause must be smart now it is suuuper dumb -----*/
-            // 2: start hashing -> send ranges
-            // we must keep the current status of the work
-
+            }
 
             // 3: wait for problem hash from server
-            while(cch.currProblem == null ){/*wait*/}
+            //while(cch.currProblem == null ){/*wait*/}
 
             // 4: start searching
-            currentServerListener.shareProblemHash(cch.currProblem);
+            Thread.sleep(5000);
+            currentServerListener.shareProblemHash("6F908D8330A81A42A7F9C4120AFBEA5D".getBytes());//(cch.currProblem);
 
             /*^^^^^ All this part could be implemented differently  cause must be smart now it is suuuper dumb ^^^^^*/
 
@@ -123,13 +98,14 @@ public class Worker {
                 // search hashmap
                 Worker.getInstance().searchHashes(contents[1]);
                 break;
-            case "RANGE": // e.g. RANGE 500-1000
+            case "RANGE": // e.g. RANGE 12
                 // work all integers in the range
-                Worker.getInstance().processRange(Integer.parseInt(contents[1]) , Integer.parseInt(contents[2]));
+                Worker.getInstance().processRange(Integer.parseInt(contents[1]));
                 break;
             case "SOLVED": // SOLVED 0957u387r84r7thisisahash98fre98 666666
                 // only the leader receives this
                 System.out.println("The solution to " + contents[2] + " is: " + contents[1]);
+
                 break;
             case "STOP": // STOP 0957u387r84r7thisisahash98fre98
                 // leader informs workers to stop all work on this hash (since a solution is
@@ -146,8 +122,22 @@ public class Worker {
                 connectedIPs = newIPList;
                 //currentLeader.getIP();
                 break;
-            case "PROGRESS":
+            case "STATUS":
                 //used each time the server commits the start if an activity to update everybody on its status
+                String IP = contents[1];
+                for (int i = 2; i < contents.length; i++) {
+                    ranges.put(IP , Integer.parseInt(contents[i]));
+                }
+                if(isServer)//if the server than tell the others!
+                    currentServerListener.broadcastRequest(packet);
+
+                break;
+            case "SETUP": // SETUP problemsize rangesize
+                problemSize = Integer.parseInt(contents[1]);
+                rangeSize = Integer.parseInt(contents[2]);
+                break;
+            case "NEXT":
+                currentServerListener.sendNextRange(remoteIP);
                 break;
         }
     }
@@ -158,7 +148,7 @@ public class Worker {
             currentServerListener.removeOffline(IP); //it will inform all the others
             //btw we can optimize here removing the step and updating
         } else if (!isServer && IP.equalsIgnoreCase(currentLeaderIP)){ //the server went down!
-            //than that's a bit of a problem
+            System.out.println("Debug: Looking for the next server!");
             connectedIPs.remove(IP);
             currentLeader.dismiss();
 
@@ -177,7 +167,7 @@ public class Worker {
             if(minIP == myIPNumber){
                 //this client gets to be the server!
                 currentLeader = null; //so hopefully the gc will let us save some RAM
-                recoverAsServer();
+                startAsServer(true);
             }else{
                 // waits for the server to start
                 try{ Thread.sleep(10000); System.out.println("Debug: Sleeping till new server goes online");} catch (Exception e){}
@@ -202,8 +192,6 @@ public class Worker {
         BackgroundSocket probableLeaderSocket = null;
         //String myIP = null; faster w/
     try {
-        //myIP = InetAddress.getLocalHost().getHostAddress(); faster w/
-        //System.out.println("My IP is : " + myIP);
         for (int i = 0; i <= 255; i++) {
             hostTested = subnet + "." + i;
             if (InetAddress.getByName(hostTested).isReachable(timeout)) { //!hostTested.equalsIgnoreCase(myIP) &&  faster w/
@@ -218,15 +206,15 @@ public class Worker {
                 }
             }
         }
-    } catch (IOException e){
-        e.printStackTrace();//DEBUG
-    }
+    } catch (IOException e){ }
         System.out.println("UNABLE TO FIND LEADER");
         return null;
     }
 
-    public void processRange(int lowerBound, int upperBound)
+    public void processRange(int rangeNumber)
     {   //upper EXCLUSIVE
+        int lowerBound = (problemSize/rangeSize) * rangeNumber;
+        int upperBound = lowerBound + rangeSize;
         try {
             MessageDigest digester = MessageDigest.getInstance("MD5");
             byte[] hash;
@@ -240,8 +228,10 @@ public class Worker {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Finished range");
+        System.out.println("Finished range => " + rangeNumber);
 
+        currentLeader.sendRequest("STATUS " + rangeNumber);
+        currentLeader.sendRequest("NEXT");
     }
     //shouldn't we use Integer instead of int?
     public void sendSolution(String problem, boolean solved, int solution)

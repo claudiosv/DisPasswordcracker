@@ -2,13 +2,15 @@ import com.sun.corba.se.spi.orbutil.threadpool.Work;
 import nutt.Server;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.util.*;
 
 public class ServerListener extends Thread {
     private ServerSocket serverSocket;
     private HashMap<String, BackgroundSocket> backgroundSockets; // HashMap<String, BackgroundSocket>
+    public Integer problemSize, rangeSize;
+
+    private Stack<Integer> toHash;
     private int port;
 
     public ServerListener (int port){
@@ -28,6 +30,8 @@ public class ServerListener extends Thread {
                 bs.start();
                 //each time a new client is connected it sends all the IPLIST!
                 updateIPs();
+                sendSetup(bs.getRemoteIP());
+                sendNextRange(bs.getRemoteIP());
                 // bs.sendRequest("SOLVE 6F908D8330A81A42A7F9C4120AFBEA5D"); //10000000 "6F908D8330A81A42A7F9C4120AFBEA5D" -> "6579843"
             }
         } catch (IOException ex) {
@@ -35,10 +39,30 @@ public class ServerListener extends Thread {
         }
     }
 
-    public void disconnect() throws IOException {
-        serverSocket.close();
+    public void sendNextRange(String IP){
+        if(!toHash.empty()){
+        int rangeNumber = toHash.pop();
+        routeRequest("RANGE " + rangeNumber, IP);
+        }else {
+            System.out.println("Debug: finished problemsize!");
+        }
     }
 
+    public void hashSetup(int problemSize, int rangeSize){
+        this.problemSize = problemSize;
+        this.rangeSize = rangeSize;
+        while(getConnectedIPs().isEmpty()){/*WAIT if no one is online*/}
+        broadcastRequest("SETUP " + problemSize + " " + rangeSize);
+        Integer rangeNo = 0;
+        toHash = new Stack<>();
+        for (int i = 0; i < problemSize ; i+= rangeSize) {
+            toHash.push(rangeNo);
+            rangeNo += rangeSize;
+        }
+    }
+    public void sendSetup(String IP){
+        routeRequest("SETUP " + problemSize + " " + rangeSize, IP);
+    }
     //extracts form the map the ips
     public List<String> getConnectedIPs()
     {

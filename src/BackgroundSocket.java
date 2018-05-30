@@ -20,7 +20,7 @@ public class BackgroundSocket extends Thread {
             @Override
             public void run() {
                 checkConnection();
-                System.out.println("Debug: IPs checked!");
+                //System.out.println("Debug: IPs checked!");
             }
         }, 5000, 5000); // each 5 seconds check connection!
     }
@@ -62,7 +62,7 @@ public class BackgroundSocket extends Thread {
             clientSocket.close();
             System.out.println("Debug: Socket performed a CLEAN disconnection");
             Worker.getInstance().notifyOffline(getRemoteIP());
-        } catch (Exception e){ e.printStackTrace(); /*TODO remove*/ }
+        } catch (Exception e){}
     }
 
     public void sendRequest(String inputLine) {
