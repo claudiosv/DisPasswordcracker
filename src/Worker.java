@@ -143,6 +143,7 @@ public class Worker {
                     newIPList.add(contents[i]);
                 }
                 connectedIPs = newIPList;
+                //currentLeader.getIP();
                 break;
             case "ANNOUNCE": //ANNOUNCE server IP Every start of server this must be sent(important for the reconnection not for the first connection)
                 //means that a new server is announcing itself on the network
@@ -159,6 +160,7 @@ public class Worker {
             //btw we can optimize here removing the step and updating
         } else if (!isServer && IP.equalsIgnoreCase(currentLeaderIP)){ //the server went down!
             //than that's a bit of a problem
+            connectedIPs.remove(IP);
             String myIPString = currentLeader.getIP();
             int myIPNumber = Integer.parseInt(myIPString.split("\\.")[3]); //last 3 digit of my ip
 
@@ -168,13 +170,14 @@ public class Worker {
                 if(myIPNumber > othersIPNumber)
                     minIP = othersIPNumber;
             }
+            System.out.println("Debug: my ip number is => " + myIPNumber + " the min is => " + minIP);
             if(minIP == myIPNumber){
                 //this client gets to be the server!
                 currentLeader = null; //so hopefully the gc will let us save some RAM
                 recoverAsServer();
             }else{
                 // waits for the server to start
-                try{ Thread.sleep(1000); } catch (Exception e){}
+                try{ Thread.sleep(10000); System.out.println("Debug: Sleeping till new server goes online");} catch (Exception e){}
 
                 currentLeader = discoverLeader(subnet);
                 currentLeader.start();

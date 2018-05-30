@@ -23,8 +23,8 @@ public class ServerListener extends Thread {
             while (true) {
                 System.out.println("Debug: server is listening");
                 BackgroundSocket bs = new BackgroundSocket(serverSocket.accept());
-                backgroundSockets.put(bs.getIP(), bs); // set the ip as key
-                System.out.println("Debug: ip added = " + bs.getIP());
+                backgroundSockets.put(bs.getRemoteIP(), bs); // set the ip as key
+                System.out.println("Debug: ip added = " + bs.getRemoteIP());
                 bs.start();
                 //each time a new client is connected it sends all the IPLIST!
                 updateIPs();
@@ -48,6 +48,7 @@ public class ServerListener extends Thread {
     //a method to sync the state of work should be implemented(more than one)
     public void removeOffline(String offlineIP){ //called by bgsokect on disconnection
         //get and delete the offline client from the list
+        backgroundSockets.get(offlineIP).dismiss();
         backgroundSockets.remove(offlineIP);
         //redistribute work could go here!
     }

@@ -11,6 +11,7 @@ public class BackgroundSocket extends Thread {
     private PrintWriter out;
     private BufferedReader in;
     private Timer awakeCheck = new Timer();
+    private String myIP;
 
     public BackgroundSocket(Socket socket) {
         this.clientSocket = socket;
@@ -21,26 +22,32 @@ public class BackgroundSocket extends Thread {
                 checkConnection();
                 System.out.println("Debug: IPs checked!");
             }
-        }, 0, 5000); // each 5 seconds check connection!
+        }, 5000, 5000); // each 5 seconds check connection!
     }
 
     public void checkConnection(){
         try {
-            if(InetAddress.getByName(getIP()).isReachable(100))
-                Worker.getInstance().notifyOffline(getIP());
+            if(!InetAddress.getByName(getRemoteIP()).isReachable(1000))
+                Worker.getInstance().notifyOffline(getRemoteIP());
         } catch (IOException e) { }
     }
 
     @Override
     public void run() {
-        System.out.println("Remote: " + getRemoteIP() + " ----- Inet: " + getIP() );
+        //start Listening than get the ip
+        //System.out.println("Remote: " + getRemoteIP() + " ----- Inet: " + getIP() );
+        System.out.println("Listening on => " + getRemoteIP());
         listen();
     }
 
     public String getRemoteIP() {
-        return clientSocket.getRemoteSocketAddress().toString();
+        return clientSocket.getInetAddress().getHostAddress();
     }
-    public String getIP(){return clientSocket.getInetAddress().getHostAddress(); }
+    public String getIP(){
+        if(myIP == null)
+            try { myIP = InetAddress.getLocalHost().getHostAddress();} catch (UnknownHostException e) {}
+        return myIP;
+    }
 
     public void listen() {
         try {
@@ -48,17 +55,14 @@ public class BackgroundSocket extends Thread {
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             while ((inputLine = in.readLine()) != null) {
                 // process inputLine
-                Worker.getInstance().parsePacket(inputLine, getIP());
+                Worker.getInstance().parsePacket(inputLine, getRemoteIP());
                 // out.println(inputLine);
             }
             in.close();
             clientSocket.close();
             System.out.println("Debug: Socket performed a CLEAN disconnection");
-            Worker.getInstance().notifyOffline(getIP());
-        } catch (Exception e){
-            //serious stuff here
-            e.printStackTrace();
-        }
+            Worker.getInstance().notifyOffline(getRemoteIP());
+        } catch (Exception e){ e.printStackTrace(); /*TODO remove*/ }
     }
 
     public void sendRequest(String inputLine) {
@@ -66,11 +70,18 @@ public class BackgroundSocket extends Thread {
             out = new PrintWriter(clientSocket.getOutputStream(), true);
             out.println(inputLine);
             System.out.println("Debug: sent command => " + inputLine);
-        } catch (ConnectException e) {
-            System.out.println("Debug: Offline status detected! IP => " + getIP());
-            Worker.getInstance().notifyOffline(getIP());
-        } catch (IOException iEx) {
+        } /*catch (ConnectException e) {
+            System.out.println("Debug: Offline status detected! IP => " + getRemoteIP());
+            Worker.getInstance().notifyOffline(getRemoteIP());
+        } */ catch (IOException iEx) {
             iEx.printStackTrace();
         }
+    }
+
+    public void dismiss(){
+        try {
+            awakeCheck.cancel();
+            currentThread().join(10); //close the thread
+        } catch (InterruptedException e) { }
     }
 }
