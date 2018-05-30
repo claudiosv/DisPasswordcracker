@@ -20,7 +20,8 @@ public class Worker {
     public ServerListener currentServerListener = null;
     public List<Interval> initialIntervals = null;
     public int port = 3333;
-    private boolean isServer = false; //debug but could be useful
+    private boolean isServer = false;
+    public String subnet;
 
     private Worker() {
         hashesMap = new ConcurrentHashMap<>();
@@ -33,8 +34,9 @@ public class Worker {
 
     public void startAsClient(String subnet)
     {
+        this.subnet = subnet;
         //here starts the discovery part
-        currentLeader = discoverLeader(subnet);
+        currentLeader = discoverLeader(this.subnet);
         currentLeader.run();
     }
 
@@ -57,6 +59,42 @@ public class Worker {
 
             // 1: registers with the server
             sci.register("ThatDamnGPU", "TDGPU", cch );
+
+            /*----- All this part could be implemented differently  cause must be smart now it is suuuper dumb -----*/
+            // 2: start hashing -> send ranges
+            // we must keep the current status of the work
+
+
+            // 3: wait for problem hash from server
+            while(cch.currProblem == null ){/*wait*/}
+
+            // 4: start searching
+            currentServerListener.shareProblemHash(cch.currProblem);
+
+            /*^^^^^ All this part could be implemented differently  cause must be smart now it is suuuper dumb ^^^^^*/
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void recoverAsServer(){
+        isServer = true;
+        currentServerListener = new ServerListener(port);
+        currentServerListener.run();
+
+        // 0: Lookup the server
+        // Note: Insert the IP-address or the domain name of the host
+        // where your server is running
+        try {
+            ServerCommInterface sci = (ServerCommInterface) Naming.lookup("rmi://actarus.inf.unibz.it/server");
+
+            //get ready to comunicate
+            // create new client comm handler
+            ClientCommHandler cch = new ClientCommHandler();
+
+            // 1: registers with the server
+            sci.reregister("ThatDamnGPU", "TDGPU", cch );
 
             /*----- All this part could be implemented differently  cause must be smart now it is suuuper dumb -----*/
             // 2: start hashing -> send ranges
@@ -125,6 +163,26 @@ public class Worker {
             //btw we can optimize here removing the step and updating
         } else if (!isServer && IP.equalsIgnoreCase(currentLeaderIP)){ //the server went down!
             //than that's a bit of a problem
+            String myIPString = currentLeader.getIP();
+            int myIPNumber = Integer.parseInt(myIPString.substring(myIPString.length()-3)); //last 3 digit of my ip
+
+            int minIP = myIPNumber;
+            for (String othersIPString: connectedIPs) {
+                int othersIPNumber = Integer.parseInt(othersIPString.substring(othersIPString.length()-3));
+                if(myIPNumber > othersIPNumber)
+                    minIP = othersIPNumber;
+            }
+            if(minIP == myIPNumber){
+                //this client gets to be the server!
+                currentLeader = null; //so hopefully the gc will let us save some RAM
+                recoverAsServer();
+            }else{
+                // waits for the server to start
+                try{ Thread.sleep(1000); } catch (Exception e){}
+                
+                currentLeader = discoverLeader(subnet);
+                currentLeader.start();
+            }
         }
         updateIPList(IP);
     }
