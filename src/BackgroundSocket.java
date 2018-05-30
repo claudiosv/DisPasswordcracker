@@ -2,35 +2,22 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.Socket;
+import java.net.*;
 
 public class BackgroundSocket extends Thread {
     private Socket clientSocket;
     private PrintWriter out;
     private BufferedReader in;
-    private boolean discovery = false;
-    private int timeout;
 
 
     public BackgroundSocket(Socket socket) {
         this.clientSocket = socket;
     }
 
-    //intentional overload
-//    public BackgroundSocket(Socket socket, boolean discoveryState, int timeout) {
-//        this.clientSocket = socket;
-//        this.discovery = discoveryState;
-//        this.timeout = timeout;
-//    }
-
     @Override
     public void run() {
         System.out.println("Remote: " + getRemoteIP() + " ----- Inet: " + getIP() );
-        if(discovery){
-            discoveryProcedure();
-        } else {
-            listen();
-        }
+        listen();
     }
 
     public String getRemoteIP() {
@@ -40,39 +27,34 @@ public class BackgroundSocket extends Thread {
 
     public void listen() {
         try {
-            out = new PrintWriter(clientSocket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
             String inputLine;
+            int count = 0;
+            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             while ((inputLine = in.readLine()) != null) {
                 // process inputLine
                 Worker.getInstance().parsePacket(inputLine, getIP());
                 // out.println(inputLine);
             }
-
             in.close();
-            out.close();
             clientSocket.close();
-        } catch (IOException iEx) {
-            if (iEx.getMessage().equals("Connection reset")) {
-                System.out.println("Socket disconnected");
-
-            } else {
-                iEx.printStackTrace();
-            }
+            System.out.println("Debug: Socket performed a CLEAN disconnection");
+            Worker.getInstance().notifyOffline(getIP());
+        } catch (Exception e){
+            //serious stuff here
+            e.printStackTrace();
         }
     }
-    public void discoveryProcedure(){
 
-    }
     public void sendRequest(String inputLine) {
         try {
             out = new PrintWriter(clientSocket.getOutputStream(), true);
             out.println(inputLine);
-            System.out.println(inputLine);
+            System.out.println("Debug: sent command => " + inputLine);
+        } catch (ConnectException e) {
+            System.out.println("Debug: Offline status detected! IP => " + getIP());
+            Worker.getInstance().notifyOffline(getIP());
         } catch (IOException iEx) {
             iEx.printStackTrace();
         }
     }
-
 }

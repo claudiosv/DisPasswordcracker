@@ -113,23 +113,40 @@ public class Worker {
                 currentLeaderIP = contents[1];
                 //update connection of the client here! TODO
                 break;
-            case "OFFLINE": //reached when a someone goes offline
+            case "AWAKE": //reached when a someone goes offline
                 break;
         }
     }
 
+    public void notifyOffline(String IP){
+        System.out.println("Debug: someone went offline! IP => " + IP);
+        if (isServer){ // in case this RPI is server and a client disconnected
+            currentServerListener.removeOffline(IP); //it will inform all the others
+            //btw we can optimize here removing the step and updating
+        } else if (!isServer && IP.equalsIgnoreCase(currentLeaderIP)){ //the server went down!
+            //than that's a bit of a problem
+        }
+        updateIPList(IP);
+    }
+
+    public void updateIPList(String IPtoRemove){
+        if(connectedIPs != null) //the server would have this null
+            this.connectedIPs.remove(IPtoRemove);
+    }
+
     public BackgroundSocket discoverLeader(String subnet){
+        System.out.println("Debug: entered in discovery!");
         int timeout = 10; //timeout in milliseconds to check the connection
         String hostTested = "";
         Socket probableLeaderConnection = null;
         BackgroundSocket probableLeaderSocket = null;
-        String myIP = null;
+        //String myIP = null; faster w/
     try {
-        myIP = InetAddress.getLocalHost().getHostAddress();
-        System.out.println("My IP is : " + myIP);
+        //myIP = InetAddress.getLocalHost().getHostAddress(); faster w/
+        //System.out.println("My IP is : " + myIP);
         for (int i = 0; i <= 255; i++) {
             hostTested = subnet + "." + i;
-            if (!hostTested.equalsIgnoreCase(myIP) && InetAddress.getByName(hostTested).isReachable(timeout)) {
+            if (InetAddress.getByName(hostTested).isReachable(timeout)) { //!hostTested.equalsIgnoreCase(myIP) &&  faster w/
                 System.out.println("Connecting to: " + hostTested);
                 try {
                     probableLeaderConnection = new Socket(hostTested, port);

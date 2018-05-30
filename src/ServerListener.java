@@ -1,3 +1,5 @@
+import nutt.Server;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
@@ -11,26 +13,27 @@ public class ServerListener extends Thread {
     private int port;
 
     public ServerListener (int port){
-        this.port = port;
         backgroundSockets = new HashMap<>();
+        this.port = port;
     }
 
     @Override
     public void run() {
-        try{
+        try {
             serverSocket = new ServerSocket(port);
-            while (true)
-            {
+            while (true) {
                 System.out.println("Debug: server is listening");
-                BackgroundSocket bs = new BackgroundSocket(serverSocket.accept()); 
+                BackgroundSocket bs = new BackgroundSocket(serverSocket.accept());
                 backgroundSockets.put(bs.getIP(), bs); // set the ip as key
                 System.out.println("Debug: ip added = " + bs.getIP());
                 bs.start();
-                //first time connection send the IPLIST!
+                //each time a new client is connected it sends all the IPLIST!
                 updateIPs();
-               // bs.sendRequest("SOLVE 6F908D8330A81A42A7F9C4120AFBEA5D"); //10000000 "6F908D8330A81A42A7F9C4120AFBEA5D" -> "6579843"
+                // bs.sendRequest("SOLVE 6F908D8330A81A42A7F9C4120AFBEA5D"); //10000000 "6F908D8330A81A42A7F9C4120AFBEA5D" -> "6579843"
             }
-        } catch (IOException ex){ex.printStackTrace();}
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void disconnect() throws IOException {
@@ -44,8 +47,10 @@ public class ServerListener extends Thread {
     }
 
     //a method to sync the state of work should be implemented(more than one)
-    public static void notifyOffline(String offlineIP){ //called by bgsokect on disconnection
-
+    public void removeOffline(String offlineIP){ //called by bgsokect on disconnection
+        //get and delete the offline client from the list
+        backgroundSockets.remove(offlineIP);
+        //redistribute work could go here!
     }
     //for now it's void but than could return smth to notify about the status
     public void shareProblemHash(byte[] hash){
