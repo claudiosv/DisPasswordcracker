@@ -1,10 +1,8 @@
 import commInterfaces.*;
 
 import java.io.IOException;
-import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
@@ -151,8 +149,6 @@ public class Worker {
                 currentLeaderIP = contents[1];
                 //update connection of the client here! TODO
                 break;
-            case "AWAKE": //reached when a someone goes offline
-                break;
         }
     }
 
@@ -164,11 +160,11 @@ public class Worker {
         } else if (!isServer && IP.equalsIgnoreCase(currentLeaderIP)){ //the server went down!
             //than that's a bit of a problem
             String myIPString = currentLeader.getIP();
-            int myIPNumber = Integer.parseInt(myIPString.substring(myIPString.length()-3)); //last 3 digit of my ip
+            int myIPNumber = Integer.parseInt(myIPString.split("\\.")[3]); //last 3 digit of my ip
 
             int minIP = myIPNumber;
             for (String othersIPString: connectedIPs) {
-                int othersIPNumber = Integer.parseInt(othersIPString.substring(othersIPString.length()-3));
+                int othersIPNumber = Integer.parseInt(othersIPString.split("\\.")[3]);
                 if(myIPNumber > othersIPNumber)
                     minIP = othersIPNumber;
             }

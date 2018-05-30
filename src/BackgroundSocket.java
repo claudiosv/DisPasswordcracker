@@ -3,15 +3,32 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class BackgroundSocket extends Thread {
     private Socket clientSocket;
     private PrintWriter out;
     private BufferedReader in;
-
+    private Timer awakeCheck = new Timer();
 
     public BackgroundSocket(Socket socket) {
         this.clientSocket = socket;
+        //each bgsockets checks each other
+        awakeCheck.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                checkConnection();
+                System.out.println("Debug: IPs checked!");
+            }
+        }, 0, 5000); // each 5 seconds check connection!
+    }
+
+    public void checkConnection(){
+        try {
+            if(InetAddress.getByName(getIP()).isReachable(100))
+                Worker.getInstance().notifyOffline(getIP());
+        } catch (IOException e) { }
     }
 
     @Override

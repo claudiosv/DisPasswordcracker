@@ -25,19 +25,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Worker.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Worker.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Worker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="499">
-              <caret line="158" column="40" selection-start-line="158" selection-start-column="40" selection-end-line="158" selection-end-column="40" />
+            <state relative-caret-position="441">
+              <caret line="150" column="22" selection-start-line="150" selection-start-column="22" selection-end-line="150" selection-end-column="22" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#startAsServer#0;class#Worker#0" />
                 <element signature="method#recoverAsServer#0;class#Worker#0" />
-                <element signature="method#notifyOffline#0;class#Worker#0" />
                 <element signature="method#updateIPList#0;class#Worker#0" />
                 <element signature="method#discoverLeader#0;class#Worker#0" />
+                <element signature="method#processRange#0;class#Worker#0" />
                 <element signature="method#sendSolution#0;class#Worker#0" />
+                <element signature="method#searchHashes#0;class#Worker#0" />
               </folding>
             </state>
           </provider>
@@ -46,34 +47,35 @@
       <file leaf-file-name="ServerListener.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ServerListener.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="236">
-              <caret line="18" column="67" selection-start-line="18" selection-start-column="67" selection-end-line="18" selection-end-column="67" />
+            <state relative-caret-position="157">
+              <caret line="11" column="21" selection-start-line="11" selection-start-column="21" selection-end-line="11" selection-end-column="21" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#585#700#0" expanded="true" />
-                <element signature="e#699#700#0" expanded="true" />
                 <element signature="method#disconnect#0;class#ServerListener#0" />
+                <element signature="e#2091#2128#0" />
+                <element signature="e#2404#2405#0" expanded="true" />
+                <element signature="e#2469#2470#0" expanded="true" />
                 <element signature="method#updateIPs#0;class#ServerListener#0" />
-                <element signature="method#shareIPs#0;class#ServerListener#0" />
                 <element signature="method#byteArrayToHex#0;class#ServerListener#0" />
                 <element signature="method#routeRequest#0;class#ServerListener#0" />
                 <element signature="method#broadcastRequest#0;class#ServerListener#0" />
+                <element signature="method#shareIPs#0;class#ServerListener#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BackgroundSocket.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="BackgroundSocket.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/BackgroundSocket.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="206">
-              <caret line="29" column="29" selection-start-line="29" selection-start-column="29" selection-end-line="29" selection-end-column="29" />
+            <state relative-caret-position="157">
+              <caret line="16" column="42" selection-start-line="16" selection-start-column="42" selection-end-line="16" selection-end-column="42" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#369#370#0" expanded="true" />
-                <element signature="e#411#412#0" expanded="true" />
-                <element signature="e#710#711#0" expanded="true" />
-                <element signature="e#781#782#0" expanded="true" />
+                <element signature="e#567#749#0" expanded="true" />
+                <element signature="e#748#749#0" expanded="true" />
+                <element signature="e#840#841#0" expanded="true" />
+                <element signature="e#911#912#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -113,8 +115,8 @@
         <option value="$PROJECT_DIR$/src/nutt/ServerCommHandler.java" />
         <option value="$PROJECT_DIR$/src/Application.java" />
         <option value="$PROJECT_DIR$/src/Worker.java" />
-        <option value="$PROJECT_DIR$/src/BackgroundSocket.java" />
         <option value="$PROJECT_DIR$/src/ServerListener.java" />
+        <option value="$PROJECT_DIR$/src/BackgroundSocket.java" />
       </list>
     </option>
   </component>
@@ -130,6 +132,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
@@ -165,8 +169,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -261,6 +263,7 @@
       <workItem from="1527517695501" duration="337000" />
       <workItem from="1527664688834" duration="37000" />
       <workItem from="1527664755530" duration="20310000" />
+      <workItem from="1527697997744" duration="1792000" />
     </task>
     <task id="LOCAL-00001" summary="Make class structure, basic BackgroundSocket and ServerListener">
       <created>1526423949290</created>
@@ -273,7 +276,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="32520000" />
+    <option name="totallyTimeSpent" value="34312000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
@@ -287,27 +290,27 @@
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="right" id="Maven Projects" order="4" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.2346194" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.2346194" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32936078" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.6986444" visible="true" weight="0.1916972" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.6975477" visible="true" weight="0.1935287" />
       <window_info anchor="right" id="Database" order="3" />
-      <window_info id="Structure" order="1" sideWeight="0.30135557" side_tool="true" visible="true" weight="0.1916972" />
+      <window_info id="Structure" order="1" sideWeight="0.30245233" side_tool="true" visible="true" weight="0.1935287" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" id="Theme Preview" order="4" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.36809176" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="right" id="Palette" order="3" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info id="UI Designer" order="2" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info id="UI Designer" order="2" />
-      <window_info anchor="right" x="0" y="0" width="370" height="850" id="Documentation" side_tool="true" weight="0.2008547" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Statistic" order="7" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="right" x="0" y="0" width="370" height="850" id="Documentation" order="5" side_tool="true" weight="0.2008547" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="Find" order="1" />
     </layout>
   </component>
@@ -323,43 +326,25 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/ServerListener.java</url>
-          <line>103</line>
+          <url>file://$PROJECT_DIR$/src/Worker.java</url>
+          <line>162</line>
           <properties />
-          <option name="timeStamp" value="21" />
+          <option name="timeStamp" value="39" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/ServerListener.java</url>
-          <line>102</line>
+          <url>file://$PROJECT_DIR$/src/Worker.java</url>
+          <line>166</line>
           <properties />
-          <option name="timeStamp" value="22" />
+          <option name="timeStamp" value="40" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/BackgroundSocket.java</url>
-          <line>31</line>
+          <url>file://$PROJECT_DIR$/src/Worker.java</url>
+          <line>165</line>
           <properties />
-          <option name="timeStamp" value="35" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/BackgroundSocket.java</url>
-          <line>36</line>
-          <properties />
-          <option name="timeStamp" value="36" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/BackgroundSocket.java</url>
-          <line>37</line>
-          <properties />
-          <option name="timeStamp" value="37" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/BackgroundSocket.java</url>
-          <line>33</line>
-          <properties />
-          <option name="timeStamp" value="38" />
+          <option name="timeStamp" value="41" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="39" />
+      <option name="time" value="43" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -369,10 +354,10 @@
           <caret line="46" column="5" selection-start-line="46" selection-start-column="5" selection-end-line="46" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#369#370#0" expanded="true" />
-            <element signature="e#411#412#0" expanded="true" />
-            <element signature="e#710#711#0" expanded="true" />
-            <element signature="e#781#782#0" expanded="true" />
+            <element signature="e#567#749#0" expanded="true" />
+            <element signature="e#748#749#0" expanded="true" />
+            <element signature="e#840#841#0" expanded="true" />
+            <element signature="e#911#912#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -399,10 +384,11 @@
             <element signature="imports" expanded="true" />
             <element signature="method#startAsServer#0;class#Worker#0" />
             <element signature="method#recoverAsServer#0;class#Worker#0" />
-            <element signature="method#notifyOffline#0;class#Worker#0" />
             <element signature="method#updateIPList#0;class#Worker#0" />
             <element signature="method#discoverLeader#0;class#Worker#0" />
+            <element signature="method#processRange#0;class#Worker#0" />
             <element signature="method#sendSolution#0;class#Worker#0" />
+            <element signature="method#searchHashes#0;class#Worker#0" />
           </folding>
         </state>
       </provider>
@@ -427,10 +413,10 @@
           <caret line="46" column="5" lean-forward="true" selection-start-line="46" selection-start-column="5" selection-end-line="46" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#369#370#0" expanded="true" />
-            <element signature="e#411#412#0" expanded="true" />
-            <element signature="e#710#711#0" expanded="true" />
-            <element signature="e#781#782#0" expanded="true" />
+            <element signature="e#567#749#0" expanded="true" />
+            <element signature="e#748#749#0" expanded="true" />
+            <element signature="e#840#841#0" expanded="true" />
+            <element signature="e#911#912#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -443,10 +429,11 @@
             <element signature="imports" expanded="true" />
             <element signature="method#startAsServer#0;class#Worker#0" />
             <element signature="method#recoverAsServer#0;class#Worker#0" />
-            <element signature="method#notifyOffline#0;class#Worker#0" />
             <element signature="method#updateIPList#0;class#Worker#0" />
             <element signature="method#discoverLeader#0;class#Worker#0" />
+            <element signature="method#processRange#0;class#Worker#0" />
             <element signature="method#sendSolution#0;class#Worker#0" />
+            <element signature="method#searchHashes#0;class#Worker#0" />
           </folding>
         </state>
       </provider>
@@ -471,10 +458,10 @@
           <caret line="27" column="58" selection-start-line="27" selection-start-column="58" selection-end-line="27" selection-end-column="58" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#369#370#0" expanded="true" />
-            <element signature="e#411#412#0" expanded="true" />
-            <element signature="e#710#711#0" expanded="true" />
-            <element signature="e#781#782#0" expanded="true" />
+            <element signature="e#567#749#0" expanded="true" />
+            <element signature="e#748#749#0" expanded="true" />
+            <element signature="e#840#841#0" expanded="true" />
+            <element signature="e#911#912#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -487,10 +474,11 @@
             <element signature="imports" expanded="true" />
             <element signature="method#startAsServer#0;class#Worker#0" />
             <element signature="method#recoverAsServer#0;class#Worker#0" />
-            <element signature="method#notifyOffline#0;class#Worker#0" />
             <element signature="method#updateIPList#0;class#Worker#0" />
             <element signature="method#discoverLeader#0;class#Worker#0" />
+            <element signature="method#processRange#0;class#Worker#0" />
             <element signature="method#sendSolution#0;class#Worker#0" />
+            <element signature="method#searchHashes#0;class#Worker#0" />
           </folding>
         </state>
       </provider>
@@ -508,10 +496,10 @@
           <caret line="27" column="58" selection-start-line="27" selection-start-column="58" selection-end-line="27" selection-end-column="58" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#369#370#0" expanded="true" />
-            <element signature="e#411#412#0" expanded="true" />
-            <element signature="e#710#711#0" expanded="true" />
-            <element signature="e#781#782#0" expanded="true" />
+            <element signature="e#567#749#0" expanded="true" />
+            <element signature="e#748#749#0" expanded="true" />
+            <element signature="e#840#841#0" expanded="true" />
+            <element signature="e#911#912#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -531,10 +519,11 @@
             <element signature="imports" expanded="true" />
             <element signature="method#startAsServer#0;class#Worker#0" />
             <element signature="method#recoverAsServer#0;class#Worker#0" />
-            <element signature="method#notifyOffline#0;class#Worker#0" />
             <element signature="method#updateIPList#0;class#Worker#0" />
             <element signature="method#discoverLeader#0;class#Worker#0" />
+            <element signature="method#processRange#0;class#Worker#0" />
             <element signature="method#sendSolution#0;class#Worker#0" />
+            <element signature="method#searchHashes#0;class#Worker#0" />
           </folding>
         </state>
       </provider>
@@ -674,50 +663,52 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/BackgroundSocket.java">
+    <entry file="file://$PROJECT_DIR$/src/Worker.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="29" column="29" selection-start-line="29" selection-start-column="29" selection-end-line="29" selection-end-column="29" />
+        <state relative-caret-position="441">
+          <caret line="150" column="22" selection-start-line="150" selection-start-column="22" selection-end-line="150" selection-end-column="22" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#369#370#0" expanded="true" />
-            <element signature="e#411#412#0" expanded="true" />
-            <element signature="e#710#711#0" expanded="true" />
-            <element signature="e#781#782#0" expanded="true" />
+            <element signature="method#startAsServer#0;class#Worker#0" />
+            <element signature="method#recoverAsServer#0;class#Worker#0" />
+            <element signature="method#updateIPList#0;class#Worker#0" />
+            <element signature="method#discoverLeader#0;class#Worker#0" />
+            <element signature="method#processRange#0;class#Worker#0" />
+            <element signature="method#sendSolution#0;class#Worker#0" />
+            <element signature="method#searchHashes#0;class#Worker#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ServerListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="236">
-          <caret line="18" column="67" selection-start-line="18" selection-start-column="67" selection-end-line="18" selection-end-column="67" />
+        <state relative-caret-position="157">
+          <caret line="11" column="21" selection-start-line="11" selection-start-column="21" selection-end-line="11" selection-end-column="21" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#585#700#0" expanded="true" />
-            <element signature="e#699#700#0" expanded="true" />
             <element signature="method#disconnect#0;class#ServerListener#0" />
+            <element signature="e#2091#2128#0" />
+            <element signature="e#2404#2405#0" expanded="true" />
+            <element signature="e#2469#2470#0" expanded="true" />
             <element signature="method#updateIPs#0;class#ServerListener#0" />
-            <element signature="method#shareIPs#0;class#ServerListener#0" />
             <element signature="method#byteArrayToHex#0;class#ServerListener#0" />
             <element signature="method#routeRequest#0;class#ServerListener#0" />
             <element signature="method#broadcastRequest#0;class#ServerListener#0" />
+            <element signature="method#shareIPs#0;class#ServerListener#0" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Worker.java">
+    <entry file="file://$PROJECT_DIR$/src/BackgroundSocket.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="499">
-          <caret line="158" column="40" selection-start-line="158" selection-start-column="40" selection-end-line="158" selection-end-column="40" />
+        <state relative-caret-position="157">
+          <caret line="16" column="42" selection-start-line="16" selection-start-column="42" selection-end-line="16" selection-end-column="42" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#startAsServer#0;class#Worker#0" />
-            <element signature="method#recoverAsServer#0;class#Worker#0" />
-            <element signature="method#notifyOffline#0;class#Worker#0" />
-            <element signature="method#updateIPList#0;class#Worker#0" />
-            <element signature="method#discoverLeader#0;class#Worker#0" />
-            <element signature="method#sendSolution#0;class#Worker#0" />
+            <element signature="e#567#749#0" expanded="true" />
+            <element signature="e#748#749#0" expanded="true" />
+            <element signature="e#840#841#0" expanded="true" />
+            <element signature="e#911#912#0" expanded="true" />
           </folding>
         </state>
       </provider>
