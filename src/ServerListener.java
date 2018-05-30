@@ -1,20 +1,28 @@
 import nutt.Server;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.sql.Time;
+import java.util.*;
 
 public class ServerListener extends Thread {
     private ServerSocket serverSocket;
     private HashMap<String, BackgroundSocket> backgroundSockets; // HashMap<String, BackgroundSocket>
     private int port;
+    private Timer awakeCheck = new Timer();
 
     public ServerListener (int port){
         backgroundSockets = new HashMap<>();
         this.port = port;
+        //timer to send reminders to workers that they have to work
+        awakeCheck.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                broadcastRequest("AWAKE");
+            }
+        }, 1000); //delay each 1000ms
     }
 
     @Override
@@ -96,4 +104,5 @@ public class ServerListener extends Thread {
             bs.sendRequest(inputLine);
         }
     }
+
 }

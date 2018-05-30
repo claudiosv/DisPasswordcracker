@@ -28,7 +28,6 @@ public class BackgroundSocket extends Thread {
     public void listen() {
         try {
             String inputLine;
-            int count = 0;
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             while ((inputLine = in.readLine()) != null) {
                 // process inputLine

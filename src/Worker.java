@@ -179,7 +179,7 @@ public class Worker {
             }else{
                 // waits for the server to start
                 try{ Thread.sleep(1000); } catch (Exception e){}
-                
+
                 currentLeader = discoverLeader(subnet);
                 currentLeader.start();
             }
