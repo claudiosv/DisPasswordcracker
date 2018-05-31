@@ -1,6 +1,6 @@
 import commInterfaces.*;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -20,10 +20,14 @@ public class Worker {
     public ServerListener currentServerListener = null;
     public List<Interval> initialIntervals = null;
     public int port = 3333;
-    private boolean isServer = false;
+    private boolean isServer = false, notAlreadyFound = false;
     public String subnet;
     public Integer problemSize, rangeSize;
     public HashMap<String, Integer> ranges;
+    public ClientCommHandler cch;
+    public PrintWriter fileCacher;
+    private String currentProblem;
+    public ArrayList<Integer> cachedRanges = new ArrayList<>();
 
     private Worker() {
         hashesMap = new ConcurrentHashMap<>();
@@ -49,7 +53,7 @@ public class Worker {
         isServer = true;
         currentServerListener = new ServerListener(port);
         currentServerListener.start();
-        int guessedProblemSize = 10000000; //this is a guess
+        int guessedProblemSize = 15000000; //this is a guess
 
         // 0: Lookup the server
         // Note: Insert the IP-address or the domain name of the host
@@ -59,7 +63,7 @@ public class Worker {
 
             //get ready to comunicate
             // create new client comm handler
-            //ClientCommHandler cch = new ClientCommHandler();
+            cch = new ClientCommHandler();
 
             // 1: registers with the server
             if(recover){
@@ -76,11 +80,11 @@ public class Worker {
 
             // 3: wait for problem hash from server
             //while(cch.currProblem == null ){/*wait*/}
-
+            //currentProblem = cch.currProblem
             // 4: start searching
-            Thread.sleep(5000);
-            currentServerListener.shareProblemHash("6F908D8330A81A42A7F9C4120AFBEA5D".getBytes());//(cch.currProblem);
-
+            Thread.sleep(10000);//DEBUG
+            currentServerListener.shareProblemHash("1bbd886460827015e5d605ed44252251");//(cch.currProblem);
+            // 11 111 111
             /*^^^^^ All this part could be implemented differently  cause must be smart now it is suuuper dumb ^^^^^*/
 
         } catch (Exception e) {
@@ -96,20 +100,28 @@ public class Worker {
         switch (contents[0]) {
             case "SOLVE": // SOLVE 0957u387r84r7thisisahash98fre98
                 // search hashmap
+                notAlreadyFound = true;
                 Worker.getInstance().searchHashes(contents[1]);
+                currentProblem = contents[1];
                 break;
             case "RANGE": // e.g. RANGE 12
                 // work all integers in the range
                 Worker.getInstance().processRange(Integer.parseInt(contents[1]));
                 break;
-            case "SOLVED": // SOLVED 0957u387r84r7thisisahash98fre98 666666
+            case "SOLVED": // SOLVED YES/NO 666666 0957u387r84r7thisisahash98fre98
                 // only the leader receives this
-                System.out.println("The solution to " + contents[2] + " is: " + contents[1]);
 
+                if(isServer && contents[1].equalsIgnoreCase("YES") && contents[3].equalsIgnoreCase(currentProblem)){
+                    System.out.println("Debug: The solution is: " + contents[2]);
+                    currentServerListener.broadcastRequest("STOP " + currentProblem);
+                    //cch.publishProblem(contents[2].getBytes(), problemSize);
+                }
                 break;
             case "STOP": // STOP 0957u387r84r7thisisahash98fre98
                 // leader informs workers to stop all work on this hash (since a solution is
                 // found)
+                if(currentProblem.equalsIgnoreCase(contents[1]))
+                    notAlreadyFound = false;
                 break;
             case "IPLIST": // IPLIST 127.0.0.1 127.0.0.2
                 // if leader, inform the client of the current other members in pool
@@ -120,7 +132,6 @@ public class Worker {
                     newIPList.add(contents[i]);
                 }
                 connectedIPs = newIPList;
-                //currentLeader.getIP();
                 break;
             case "STATUS":
                 //used each time the server commits the start if an activity to update everybody on its status
@@ -231,9 +242,26 @@ public class Worker {
         System.out.println("Finished range => " + rangeNumber);
 
         currentLeader.sendRequest("STATUS " + rangeNumber);
+        if(hashesMap.size() >= 750000)
+            dumpOnFile(rangeNumber);
         currentLeader.sendRequest("NEXT");
+        searchHashes(rangeNumber + ""); //look for if problem exist
     }
-    //shouldn't we use Integer instead of int?
+
+    public void dumpOnFile(int rangeNumber){
+        try {
+            fileCacher = new PrintWriter(rangeNumber + "");
+            for (String hash: hashesMap.keySet()) {
+                fileCacher.println(hash + "," + hashesMap.get(hash));
+            }
+            fileCacher.close();
+            cachedRanges.add(rangeNumber);
+            hashesMap.clear();//clear the map
+            hashesMap = new ConcurrentHashMap<>(); //binds to a new so gc can do smth
+            System.gc(); //perform a GC (hopefully)
+        } catch (FileNotFoundException e) { }
+    }
+
     public void sendSolution(String problem, boolean solved, int solution)
     {
         Worker.getInstance().currentLeader.sendRequest("SOLVED" + " " + (solved ? "YES " : "NO ") + solution + " " + problem );
@@ -241,16 +269,36 @@ public class Worker {
 
     public void searchHashes(String problem)
     {
-        // -> currentProblem updated here?
-        //simple n search for the correct key
-
-
+        if(notAlreadyFound){
         Integer solution = hashesMap.get(problem);
         if(solution != null){
             Worker.getInstance().sendSolution(problem, true, solution);
         }else {
-            //no solution found in my map
-            Worker.getInstance().sendSolution(problem, false, 0);
+            solution = lookInFileCache(problem);
+            if(solution != null)
+                Worker.getInstance().sendSolution(problem, true, solution);
+            else
+                Worker.getInstance().sendSolution(problem, false, -1);
+                currentLeader.sendRequest("NEXT"); //than ask for more
         }
+        }
+    }
+    public Integer lookInFileCache(String problem){
+        String filename, line, separator = ",";
+        for (Integer range : cachedRanges) {
+            if(notAlreadyFound){
+            filename = "./" + range;
+            try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+                while ((line = br.readLine()) != null) {
+                    String[] data = line.split(separator);
+                    System.out.println("Debug : " + data[0] + " => " + problem);
+                    if(data[0].equalsIgnoreCase(problem)){
+                        return Integer.parseInt(data[1]);
+                    }
+                }
+            } catch (IOException e) {e.printStackTrace();}
+        }
+        }
+        return null;
     }
 }

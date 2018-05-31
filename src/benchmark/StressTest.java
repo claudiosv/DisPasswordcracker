@@ -1,4 +1,6 @@
 package benchmark;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.MessageDigest;
@@ -13,52 +15,69 @@ import java.util.logging.SimpleFormatter;
 public class StressTest {
 
     public static PrintWriter LOGGER = null;
-
+//    public static Integer lookInFileCache(String problem){
+//        String filename, line, separator = ",";
+//                filename = "./" + 12735000;
+//                try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+//                    while ((line = br.readLine()) != null) {
+//                        System.out.println("Debug : file cache line => " + line);
+//                        String[] data = line.split(separator);
+//                        if(data[0].equalsIgnoreCase(problem)){
+//                            return Integer.parseInt(data[1]);
+//                        }
+//                    }
+//                } catch (IOException e) {e.printStackTrace();}
+//        return null;
+//    }
     public static void main(String[] args){
-        try {
-            //logger init
-            LOGGER = new PrintWriter("benchmark_data.txt");
-            if (args.length == 0){
-                System.out.println("Must specify a test to run:\n[hash <problem size>, map <io number bound>, thread <number of max threads>, heavy <number of max threads>]");
-                System.exit(-1);
-            }else{
-                for (int i = 0; i< args.length; i++) {
-                    String arg = args[i];
-                    if(arg.equalsIgnoreCase("hash")) {
-                        //get problem size
-                        try {
-                            hashTest(Integer.parseInt(args[i + 1]) >= 100 ? Integer.parseInt(args[i + 1]) : 100);
-                        } catch (Exception nex) {
-                            hashTest(100);
-                        }
-                    }else if(arg.equalsIgnoreCase("map")){
-                        try {
-                            mapTest(Integer.parseInt(args[i + 1]) >= 10 ? Integer.parseInt(args[i + 1]) : 10);
-                        } catch (Exception nex) {
-                            hashTest(10);
-                        }
-                    } else if(arg.equalsIgnoreCase("thread")){
-                        try {
-                            threadTest(Integer.parseInt(args[i + 1]) >= 1 ? Integer.parseInt(args[i + 1]) : 1);
-                        } catch (Exception nex) {
-                            threadTest(1);
-                        }
-                    }else if(arg.equalsIgnoreCase("heavy")){
-                        try {
-                            heavyThreadTest(Integer.parseInt(args[i + 1]) >= 1 ? Integer.parseInt(args[i + 1]) : 1);
-                        } catch (Exception nex) {
-                            heavyThreadTest(1);
-                        }
-                    }else{
-                        //handle someway
-                    }
-                }
-            }
-            LOGGER.close();
+//
+//    System.out.println(lookInFileCache("46A0E718ADF05353E6C426DA74855118"));
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+//        try {
+//            //logger init
+//            LOGGER = new PrintWriter("benchmark_data.txt");
+//            if (args.length == 0){
+//                System.out.println("Must specify a test to run:\n[hash <problem size>, map <io number bound>, thread <number of max threads>, heavy <number of max threads>]");
+//                System.exit(-1);
+//            }else{
+//                for (int i = 0; i< args.length; i++) {
+//                    String arg = args[i];
+//                    if(arg.equalsIgnoreCase("hash")) {
+//                        //get problem size
+//                        try {
+//                            hashTest(Integer.parseInt(args[i + 1]) >= 100 ? Integer.parseInt(args[i + 1]) : 100);
+//                        } catch (Exception nex) {
+//                            hashTest(100);
+//                        }
+//                    }else if(arg.equalsIgnoreCase("map")){
+//                        try {
+//                            mapTest(Integer.parseInt(args[i + 1]) >= 10 ? Integer.parseInt(args[i + 1]) : 10);
+//                        } catch (Exception nex) {
+//                            hashTest(10);
+//                        }
+//                    } else if(arg.equalsIgnoreCase("thread")){
+//                        try {
+//                            threadTest(Integer.parseInt(args[i + 1]) >= 1 ? Integer.parseInt(args[i + 1]) : 1);
+//                        } catch (Exception nex) {
+//                            threadTest(1);
+//                        }
+//                    }else if(arg.equalsIgnoreCase("heavy")){
+//                        try {
+//                            heavyThreadTest(Integer.parseInt(args[i + 1]) >= 1 ? Integer.parseInt(args[i + 1]) : 1);
+//                        } catch (Exception nex) {
+//                            heavyThreadTest(1);
+//                        }
+//                    }else{
+//                        //handle someway
+//                    }
+//                }
+//            }
+//            LOGGER.close();
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
     public static void hashTest(int problemSize){
         LOGGER.println("Starting hash test...");

@@ -39,29 +39,37 @@ public class ServerListener extends Thread {
         }
     }
 
-    public void sendNextRange(String IP){
-        if(!toHash.empty()){
-        int rangeNumber = toHash.pop();
-        routeRequest("RANGE " + rangeNumber, IP);
-        }else {
-            System.out.println("Debug: finished problemsize!");
+    public void sendNextRange(String IP) {
+        if (problemSize != null) {
+            if (!toHash.empty()) {
+                int rangeNumber = toHash.pop();
+                routeRequest("RANGE " + rangeNumber, IP);
+            } else {
+                System.out.println("Debug: finished problemsize!");
+            }
         }
     }
 
     public void hashSetup(int problemSize, int rangeSize){
-        this.problemSize = problemSize;
-        this.rangeSize = rangeSize;
-        while(getConnectedIPs().isEmpty()){/*WAIT if no one is online*/}
-        broadcastRequest("SETUP " + problemSize + " " + rangeSize);
         Integer rangeNo = 0;
         toHash = new Stack<>();
         for (int i = 0; i < problemSize ; i+= rangeSize) {
             toHash.push(rangeNo);
             rangeNo += rangeSize;
         }
+        this.problemSize = problemSize;
+        this.rangeSize = rangeSize;
+        System.out.println("Debug: Setup done!");
+        //keep up with those that connected before the setup was done
+        broadcastRequest("SETUP " + problemSize + " " + rangeSize);
+        for (String IP : backgroundSockets.keySet()) {
+            sendNextRange(IP);
+        }
     }
     public void sendSetup(String IP){
+        if (problemSize != null) {
         routeRequest("SETUP " + problemSize + " " + rangeSize, IP);
+        }
     }
     //extracts form the map the ips
     public List<String> getConnectedIPs()
@@ -78,8 +86,9 @@ public class ServerListener extends Thread {
         //redistribute work could go here!
     }
     //for now it's void but than could return smth to notify about the status
-    public void shareProblemHash(byte[] hash){
-        broadcastRequest("SOLVE " + byteArrayToHex(hash));
+    public void shareProblemHash(String hash){
+        while (getConnectedIPs().size() < 2) {}//wait
+        broadcastRequest("SOLVE " + hash);
     }
 
     public void updateIPs(){
